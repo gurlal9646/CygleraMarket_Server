@@ -6,22 +6,18 @@ const VerifyUser = require('../../middlewares/VerifyUser.js');
 
 router.use(VerifyUser); // Protect all routes beneath this point
 
-
-
 // Import other API routes
 
 const usersRouter = require('./users.js');
-
-
 
 // Use the imported routes
 
 router.use('/user', usersRouter);
 
 
-router.post("/", async (request, response) => {
+router.get("/test", async (request, response) => {
 
-    return response.send('test');
+    return response.send('API is running successfully.');
 });
 
 

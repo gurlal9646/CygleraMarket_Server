@@ -1,5 +1,7 @@
 const VerifyUser = (req, res, next) => {
-    if(req.url.includes('/login') || req.url.includes('/register')){
+    console.log('in middleware' + req.url);
+
+    if(req.url.includes('/login') || req.url.includes('/register') || req.url === '/test'){
         return next();
     }
     const logged = req.signedCookies.IsLogin;
