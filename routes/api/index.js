@@ -19,5 +19,10 @@ const usersRouter = require('./users.js');
 router.use('/user', usersRouter);
 
 
+router.post("/", async (request, response) => {
+
+    return response.send('test');
+});
+
 
 module.exports = router;
