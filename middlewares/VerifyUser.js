@@ -9,6 +9,7 @@ const VerifyUser = (req, res, next) => {
         next();
     }
     else{
+        console.log('User not logged in. Redirecting to /login');
         res.redirect("/login");
     }
 
