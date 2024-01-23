@@ -1,12 +1,15 @@
 const { connect } = require("../utils/DataBase.js");
 const { encryptPassword } = require("../utils/bcrypt.js");
 const { Seller } = require("../utils/models/SellerInfo.js");
+const bodyParser = require('body-parser');
 
 
 
 const sellerRegister = async function (request, response) {
-    console.log(request.body);
-    if (await Seller.findOne({ email: request.body.email })) {
+    //console.log(request.body);
+    const { email } = request.body;
+    console.log(email)
+    if (await Seller.findOne({ email})) {
         return response.send(
             "Username already exists. Please choose a different username."
         );
