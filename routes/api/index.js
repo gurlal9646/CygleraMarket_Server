@@ -10,7 +10,7 @@ router.use(VerifyUser); // Protect all routes beneath this point
 
 const usersRouter = require('./users.js');
 const buyersRouter = require('./buyer.js');
-const sellerRouter = require('./sellerRoutes.js');
+const sellerRouter = require('./seller.js');
 
 
 // Use the imported routes

@@ -1,7 +1,7 @@
 const { connect } = require("../utils/DataBase.js");
 const { encryptPassword } = require("../utils/bcrypt.js");
 const { Seller } = require("../utils/models/SellerInfo.js");
-const bodyParser = require('body-parser');
+const ApiResponse = require('../utils/models/ApiResponse.js'); // Importing ApiResponse from the apiResponse.js file
 
 
 
@@ -10,13 +10,12 @@ const sellerRegister = async function (request, response) {
     const { email } = request.body;
     console.log(email)
     if (await Seller.findOne({ email})) {
-        return response.send(
-            "Username already exists. Please choose a different username."
-        );
-    }
+        const result = new ApiResponse(0, "USER_ALREADY_EXISTS", "User with this email already exists", null);
+        response.json(result);    }
     let dbResponse = await Seller.create(
         request.body
     );
+    console.log(dbResponse);
 
     if (dbResponse.username) {
         const options = {

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const buyerSchema = new Schema({
+    buyerId: Number,
     firstName: String,
     lastName: String,
     email:String,
@@ -18,19 +19,19 @@ const buyerSchema = new Schema({
     country:String,
     postalCode: String,
     password: String,
-    CreatedAt: {
+    createdAt: {
         type: Date,
         default: Date.now, // Set default value to the current date
       },
-      CreatedBy: {
+      createdBy: {
         type: Number,
         default: null,
       },
-      UpdatedAt: {
+      updatedAt: {
         type: Date,
         default: null, // Set default value to null
       },
-      UpdatedBy: {
+      updatedBy: {
         type: Number,
         default: null, // Set default value to null
       },

@@ -1,27 +1,31 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const sellerSchema = new Schema({
-    firstName: String,
-    lastName: String,
+const accessInfoSchema = new Schema({
+    accessInfoId: Number,
     email:String,
-    countryCode:String,
-    phoneNumber:String,
-    companyName:String,
-    category:String,
-    status: String,
-    companySize: String,
-    businessNumber: String,
-    streetAddress: String,
-    city: String,
-    state: String,
-    country:String,
-    postalCode: String,
     password: String,
+    isLocked: {
+        type: Boolean,
+        default: false
+      },
+      buyerId: {
+        type: Number,
+        default: 0
+      },
+      sellerId: {
+        type: Number,
+        default: 0
+      },
+      roleId: {
+        type: Number,
+        default: 0
+      },
     createdAt: {
         type: Date,
         default: Date.now, // Set default value to the current date
       },
+      
       createdBy: {
         type: Number,
         default: null,
@@ -36,6 +40,6 @@ const sellerSchema = new Schema({
       },
   });
   
-const Seller = mongoose.model('seller', sellerSchema,'Seller');
+const AccessInfo = mongoose.model('accessInfo', accessInfoSchema,'AccessInfo');
 
-module.exports = {Seller} ;
+module.exports = {AccessInfo} ;
