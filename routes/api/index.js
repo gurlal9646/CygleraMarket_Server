@@ -11,6 +11,7 @@ router.use(VerifyUser); // Protect all routes beneath this point
 const usersRouter = require('./users.js');
 const buyersRouter = require('./buyer.js');
 const sellerRouter = require('./seller.js');
+const loginRouter =  require('./login.js');
 
 
 // Use the imported routes
@@ -18,6 +19,7 @@ const sellerRouter = require('./seller.js');
 router.use('/user', usersRouter);
 router.use('/buyer', buyersRouter);
 router.use('/seller', sellerRouter);
+router.use('/', loginRouter);
 
 
 
