@@ -18,6 +18,11 @@ class ResponseMessage{
         static NEWUSERMESSAGE = 'User added';
         static NONEXISTINGUSER = 'USER_DOES_NOT_EXISTS';
         static NONEXISTINGUSERMESSAGE = 'User with this email does not exists';
+        static LOGINUSER = 'LOGIN_SUCCESSFULL'
+        static LOGINUSERMESSAGE ='User logged in.'
+        static LOGINFAILED = 'LOGIN_FAILED'
+        static WRONGPASSMESSAGE = 'Invalid Password'
+
 }
 
 module.exports = { Roles ,ResponseCode ,ResponseMessage };
