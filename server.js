@@ -14,7 +14,6 @@ const apiRouter = require("./routes/api");
 
 // Mount routers
 app.use("/api", apiRouter);
-app.use("/", apiRouter);
 app.use((req, res, next) => {
   res.render("404");
 });

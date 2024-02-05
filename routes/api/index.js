@@ -14,19 +14,20 @@ const sellerRouter = require('./seller.js');
 const loginRouter =  require('./login.js');
 
 
+router.get("/test", async (request, response) => {
+    console.log('inside test');
+     return response.send('API is running successfully.');
+ });
 // Use the imported routes
 
 router.use('/user', usersRouter);
 router.use('/buyer', buyersRouter);
 router.use('/seller', sellerRouter);
-router.use('/', loginRouter);
+router.use('/login', loginRouter);
 
 
 
-router.get("/test", async (request, response) => {
 
-    return response.send('API is running successfully.');
-});
 
 
 module.exports = router;
