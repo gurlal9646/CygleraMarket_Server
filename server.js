@@ -28,7 +28,10 @@ const options = {
     },
     servers:[
       {
-        url:"http:localhost:4000/"
+        url:process.env.LOCAL
+      },
+      {
+        url:process.env.REMOTE
       }
     ]
   },

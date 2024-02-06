@@ -9,9 +9,7 @@ const { AccessInfo } = require('../utils/models/AccessInfo.js');
 
 
 const sellerRegister = async function (request, response) {
-    //console.log(request.body);
     const { email} = request.body;
-    console.log(email)
     try
     {
 
@@ -19,7 +17,6 @@ const sellerRegister = async function (request, response) {
         const result = new ApiResponse(ResponseCode.FAILURE, ResponseMessage.EXISTINGUSER, ResponseMessage.EXISTINGUSERMESSAGE, null);
         response.json(result); }
     else {
-        console.log('New Seller is being registerd');
     const counter = await Counter.findOneAndUpdate(
         { name: 'sellerId' },
         { $inc: { value: 1 } },
@@ -55,8 +52,6 @@ const sellerRegister = async function (request, response) {
 connect()
     .then((connectedClient) => {
         client = connectedClient;
-
-        console.log("Connected to MongoDB Seller router");
     })
     .catch((err) => {
         console.error("Failed to connect to MongoDB", err);

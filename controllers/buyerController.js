@@ -17,7 +17,6 @@ const register = async function (request, response) {
         const result = new ApiResponse(ResponseCode.FAILURE, ResponseMessage.EXISTINGUSER, ResponseMessage.EXISTINGUSERMESSAGE, null);
         return response.json(result);
     }
-    console.log('hello');
     const counter = await Counter.findOneAndUpdate(
         { name: 'buyerId' },
         { $inc: { value: 1 } },
@@ -26,10 +25,7 @@ const register = async function (request, response) {
     request.body.buyerId = counter.value;
 
     const {password, buyerId} = request.body;
-    console.log(password);
     const encryptedPassword = await encryptPassword(password);
-
-    console.log(encryptedPassword);
 
     let dbResponse = await Buyer.create(
         request.body
@@ -58,8 +54,6 @@ const register = async function (request, response) {
 connect()
     .then((connectedClient) => {
         client = connectedClient;
-
-        console.log("Connected to MongoDB buyers router");
     })
     .catch((err) => {
         console.error("Failed to connect to MongoDB", err);

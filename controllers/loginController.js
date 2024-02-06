@@ -28,7 +28,6 @@ const loginController = async function (request, response) {
   } else {
     if (roleId == 0 || roleId == undefined) {
       userInfo = await AccessInfo.find({ email });
-      console.log(userInfo);
       if (userInfo.length > 1) {
         const result = new ApiResponse(
           ResponseCode.FAILURE,
@@ -40,7 +39,6 @@ const loginController = async function (request, response) {
       }
     } else {
       userInfo = await AccessInfo.find({ email, roleId });
-      console.log(userInfo);
     }
 
 
@@ -61,7 +59,6 @@ const loginController = async function (request, response) {
       );
       response.json(result);
     } else {
-      console.log("Wrong password");
 
       const result = new ApiResponse(
         ResponseCode.FAILURE,
@@ -78,7 +75,6 @@ connect()
   .then((connectedClient) => {
     client = connectedClient;
 
-    console.log("Connected to MongoDB Login router");
   })
   .catch((err) => {
     console.error("Failed to connect to MongoDB", err);

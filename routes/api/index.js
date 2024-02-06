@@ -18,13 +18,14 @@ const loginRouter =  require('./login.js');
  * @swagger
  * components:
  *   schemas:
- *     Book:
- *       $ref: '../../utils/models/BuyerInfo.js'
+ *     Buyer:
+ *     Seller:
+ *       
  */
 
 /**
  * @swagger
- * /api/healthcheck:
+ *  healthcheck:
  *   get:
  *     summary: Check server health
  *     description: Endpoint to check if the server is healthy.
@@ -43,10 +44,6 @@ router.use('/user', usersRouter);
 router.use('/buyer', buyersRouter);
 router.use('/seller', sellerRouter);
 router.use('/login', loginRouter);
-
-
-
-
 
 
 module.exports = router;

@@ -66,8 +66,6 @@ router.post("/login", async (request, response) => {
   connect()
   .then((connectedClient) => {
     client = connectedClient;
-
-    console.log("Connected to MongoDB users router");
   })
   .catch((err) => {
     console.error("Failed to connect to MongoDB", err);
