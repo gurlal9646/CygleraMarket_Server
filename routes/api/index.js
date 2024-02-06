@@ -14,10 +14,29 @@ const sellerRouter = require('./seller.js');
 const loginRouter =  require('./login.js');
 
 
-router.get("/test", async (request, response) => {
-    console.log('inside test');
-     return response.send('API is running successfully.');
- });
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Book:
+ *       $ref: '../../utils/models/BuyerInfo.js'
+ */
+
+/**
+ * @swagger
+ * /api/healthcheck:
+ *   get:
+ *     summary: Check server health
+ *     description: Endpoint to check if the server is healthy.
+ *     tags:
+ *       - HealthCheck
+ *     responses:
+ *       '200':
+ *         description: Server is healthy
+ */
+router.get("/healthcheck", async (request, response) => {
+    response.status(200).send("Server is healthy");
+});
 // Use the imported routes
 
 router.use('/user', usersRouter);
