@@ -5,10 +5,13 @@ const ApiResponse = require('../utils/models/ApiResponse.js'); // Importing ApiR
 const { Counter } = require("../utils/models/Counter.js");
 const {ResponseCode, ResponseMessage,Roles} = require('../utils/Enums.js'); 
 const { AccessInfo } = require('../utils/models/AccessInfo.js');
+const logger = require('../utils/logger.js')
 
 
 
 const sellerRegister = async function (request, response) {
+    logger.info(`Register Seller: ${JSON.stringify(request.body)}`);
+
     const { email} = request.body;
     try
     {
@@ -43,7 +46,7 @@ const sellerRegister = async function (request, response) {
         }
     }  
     } catch (error) {
-        console.error('Error during registration:', error);
+        logger.error(`Error during registration Seller: ${JSON.stringify(error)}`);
         response.status(500).json({ success: false, message: 'Registration failed', error: error.message });
     };
     }

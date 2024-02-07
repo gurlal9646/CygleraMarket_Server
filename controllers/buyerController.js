@@ -12,7 +12,7 @@ const logger = require('../utils/logger.js')
 
 
 const register = async function (request, response) {
-    logger.info(`Register Buyer: ${request.body}`);
+    logger.info(`Register Buyer: ${JSON.stringify(request.body)}`);
     const { email } = request.body;
     try
     {
@@ -50,7 +50,7 @@ const register = async function (request, response) {
     }
 
 } catch(error){
-    console.error('Error during registration:',error);
+    logger.error(`Error during registration Buyer: ${JSON.stringify(error)}`);
     response.status(500).json({ success: false, message: 'Registration failed', error: error.message });
 };
 }
