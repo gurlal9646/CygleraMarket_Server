@@ -18,12 +18,6 @@ const expressWinston = require('express-winston')
 const logger = require('./utils/logger')
 
 
-app.use(expressWinston.logger({
-    winstonInstance: logger,
-    statusLevels: true
-}))
-
-
 const options = {
   definition:{
     openapi:"3.0.0",

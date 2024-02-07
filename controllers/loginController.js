@@ -16,7 +16,7 @@ const logger = require('../utils/logger.js')
 
 
 const loginController = async function (request, response) {
-  logger.info(`Login Request: ${request.body}`);
+  logger.info(`Login Request: ${JSON.stringify(request.body)}`);
   const { email, password, roleId } = request.body;
   let userInfo;
   if (!(await AccessInfo.findOne({ email }))) {
