@@ -7,8 +7,12 @@ const ApiResponse = require('../utils/models/ApiResponse.js');
 const {ResponseCode, ResponseMessage, Roles} = require('../utils/Enums.js'); 
 const { AccessInfo } = require("../utils/models/AccessInfo.js");
 
+const logger = require('../utils/logger.js')
+
+
 
 const register = async function (request, response) {
+    logger.info(`Register Buyer: ${request.body}`);
     const { email } = request.body;
     try
     {

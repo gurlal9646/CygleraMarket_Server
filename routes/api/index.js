@@ -12,6 +12,8 @@ const usersRouter = require('./users.js');
 const buyersRouter = require('./buyer.js');
 const sellerRouter = require('./seller.js');
 const loginRouter =  require('./login.js');
+const logger = require('../../utils/logger.js')
+
 
 
 /**
@@ -36,6 +38,7 @@ const loginRouter =  require('./login.js');
  *         description: Server is healthy
  */
 router.get("/healthcheck", async (request, response) => {
+    logger.info(`Server is healthy`);
     response.status(200).send("Server is healthy");
 });
 // Use the imported routes

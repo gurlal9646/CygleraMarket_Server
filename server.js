@@ -2,9 +2,6 @@ require("dotenv").config();
 const port = process.env.PORT;
 const express = require("express");
 
-
-
-
 const app = express();
 const cors = require('cors');
 
@@ -16,6 +13,15 @@ app.set("view engine", "ejs");
 const swaggerUI = require('swagger-ui-express');
 const swaggerJSDoc = require('swagger-jsdoc');
 
+const expressWinston = require('express-winston')
+
+const logger = require('./utils/logger')
+
+
+app.use(expressWinston.logger({
+    winstonInstance: logger,
+    statusLevels: true
+}))
 
 
 const options = {
@@ -56,6 +62,8 @@ app.use((req, res, next) => {
   res.render("404");
 });
 
+
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  logger.info(`Server is running on port ${port}`);
+
 });

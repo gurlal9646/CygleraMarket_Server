@@ -12,11 +12,13 @@ const {
   Roles,
 } = require("../utils/Enums.js");
 const { AccessInfo } = require("../utils/models/AccessInfo.js");
+const logger = require('../utils/logger.js')
+
 
 const loginController = async function (request, response) {
+  logger.info(`Login Request: ${request.body}`);
   const { email, password, roleId } = request.body;
   let userInfo;
-  let userId;
   if (!(await AccessInfo.findOne({ email }))) {
     const result = new ApiResponse(
       ResponseCode.FAILURE,
