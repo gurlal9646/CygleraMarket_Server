@@ -31,6 +31,7 @@ class ResponseMessage{
         static PRODUCTNOTADDED = 'Product not added';
         static PRODUCTUPDATED = 'Product updated';
         static PRODUCTNOTUPDATED = 'Product not updated';
+        static NODATAFOUND ='No data found';
 
 
 

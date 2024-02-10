@@ -51,6 +51,7 @@ const addProduct = async function (request, response) {
         { new: true, upsert: true }
       );
       request.body.productId = counter.value;
+      request.body.sellerId = request.user.userId;
 
       // Create the new product
       let dbResponse = await Product.create(request.body);
@@ -81,11 +82,25 @@ const addProduct = async function (request, response) {
 };
 
 const products = async (request, response) => {
+    let apiResponse= new ApiResponse(ResponseCode.FAILURE, 0,"",null);
   try {
-    console.log(request.user);
     logger.info(`Get Products enters:`);
     // Fetch all products from the database
-    const products = await Product.find();
+    let products = [];
+    if(request.user.roleId  === Roles.BUYER || request.user.roleId  === Roles.ADMIN){
+         products = await Product.find();
+    }
+    else(request.user.roleId  === Roles.SELLER)
+    {
+        products = await Product.find({sellerId:request.user.userId});
+    }
+    if(products.length === 0) {
+        apiResponse.message = ResponseMessage.NODATAFOUND;
+    }
+    else{
+        apiResponse.code = ResponseCode.SUCCESS;
+        apiResponse.data = products;
+    }
     const result = new ApiResponse(
         ResponseCode.SUCCESS,
         0,
@@ -95,8 +110,8 @@ const products = async (request, response) => {
       response.json(result);
   } catch (error) {
     // Handle errors if any occur during the database operation
-    console.error("Error fetching products:", error);
-    response.status(500).json({ error: "Internal server error" });
+    logger.error(`Error fetching products: ${JSON.stringify(error)}`);
+    response.status(500).json(apiResponse);
   }
 };
 

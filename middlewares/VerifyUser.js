@@ -13,6 +13,7 @@ const verifyToken = (req, res, next) => {
   }
 
   let token = req.headers["x-access-token"] || req.headers["authorization"];
+  console.log(token);
 
   // If a token is found, remove 'Bearer ' if it's present
 

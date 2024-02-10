@@ -40,11 +40,11 @@ const loginController = async function (request, response) {
         return response.json(result);
       }
     } else {
-      userInfo = await AccessInfo.find({ email, roleId });
+      userInfo = await AccessInfo.findOne({ email, roleId });
     }
 
 
-    if (await comparePasswords(password, userInfo[0].password)) {
+    if (await comparePasswords(password, userInfo.password)) {
       const token = jwt.sign(
         {
           userId: userInfo.sellerId > 0 ? userInfo.sellerId : userInfo.buyerId,
@@ -53,6 +53,12 @@ const loginController = async function (request, response) {
         },
         process.env.SECRET_KEY
       );
+
+      console.log( {
+        userId: userInfo.sellerId > 0 ? userInfo.sellerId : userInfo.buyerId,
+        email: userInfo.email,
+        role: userInfo.roleId,
+      });
       const result = new ApiResponse(
         ResponseCode.SUCCESS,
         ResponseMessage.LOGINUSER,
