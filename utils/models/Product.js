@@ -1,24 +1,20 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const sellerSchema = new Schema({
+const productSchema = new Schema({
+    productId: Number,
     sellerId:Number,
-    firstName: String,
-    lastName: String,
-    email:String,
-    countryCode:String,
-    phoneNumber:String,
-    companyName:String,
+    name: String,
+    description:String,
+    price:Number,
     category:String,
-    status: String,
-    companySize: String,
-    businessNumber: String,
-    streetAddress: String,
-    city: String,
-    state: String,
-    country:String,
-    postalCode: String,
-    password: String,
+    manufacturer:String,
+    stockQuantity:Number,
+    expiryDate: {
+        type: Date,
+        default: null, // Set default value to null
+    },
+    storageConditions: String,
     createdAt: {
         type: Date,
         default: Date.now, // Set default value to the current date
@@ -37,6 +33,6 @@ const sellerSchema = new Schema({
       },
   });
   
-const Seller = mongoose.model('seller', sellerSchema,'Seller');
+const Product = mongoose.model('product', productSchema,'Product');
 
-module.exports = {Seller} ;
+module.exports = {Product} ;

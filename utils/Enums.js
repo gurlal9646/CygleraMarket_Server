@@ -27,6 +27,12 @@ class ResponseMessage{
         static LOGINFAILED = 'LOGIN_FAILED'
         static WRONGPASSMESSAGE = 'Invalid Password';
         static MULTIPLEACCOUNT = 'Multiple account found for the given email';
+        static PRODUCTADDED = 'Product added';
+        static PRODUCTNOTADDED = 'Product not added';
+        static PRODUCTUPDATED = 'Product updated';
+        static PRODUCTNOTUPDATED = 'Product not updated';
+
+
 
 
 }
