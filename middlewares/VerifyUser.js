@@ -1,6 +1,8 @@
 require("dotenv").config();
 
 const jwt = require("jsonwebtoken");
+const logger = require("../utils/logger.js");
+
 
 const secret = process.env.SECRET_KEY;
 
@@ -13,7 +15,7 @@ const verifyToken = (req, res, next) => {
   }
 
   let token = req.headers["x-access-token"] || req.headers["authorization"];
-  console.log(token);
+ logger.info(`Verifying JWT: ${token}`);
 
   // If a token is found, remove 'Bearer ' if it's present
 
@@ -35,7 +37,6 @@ const verifyToken = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, secret);
-  console.log(decoded);
     req.user = decoded; // Add the decoded token to the request object
   } catch (err) {
     return res.status(401).json({
