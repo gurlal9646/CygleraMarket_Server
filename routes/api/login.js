@@ -4,7 +4,7 @@ const router = express.Router();
 
 const loginController = require('../../controllers/loginController');
 
-router.post("/token", loginController.loginController);
+router.post("/token", loginController.Token);
 
 
 

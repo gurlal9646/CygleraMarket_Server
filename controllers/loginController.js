@@ -1,10 +1,9 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const { connect } = require("../utils/DataBase.js");
-const { encryptPassword, comparePasswords } = require("../utils/bcrypt.js");
+const { comparePasswords } = require("../utils/bcrypt.js");
 const { Seller } = require("../utils/models/SellerInfo.js");
 const ApiResponse = require("../utils/models/ApiResponse.js"); // Importing ApiResponse from the apiResponse.js file
-const { Counter } = require("../utils/models/Counter.js");
 const {
   ResponseCode,
   ResponseSubCode,
@@ -12,12 +11,25 @@ const {
   Roles,
 } = require("../utils/Enums.js");
 const { AccessInfo } = require("../utils/models/AccessInfo.js");
-const logger = require('../utils/logger.js')
+const logger = require('../utils/logger.js');
+const { Buyer } = require("../utils/models/BuyerInfo.js");
 
 
-const loginController = async function (request, response) {
+
+const Token = async function (request, response) {
   logger.info(`Login Request: ${JSON.stringify(request.body)}`);
   const { email, password, roleId } = request.body;
+
+  const { tokenResponse } = await generateToken({ email, password, roleId });
+
+  response.JSON(tokenResponse);
+
+};
+
+
+const generateToken = async function({ email, password, roleId }){
+  
+  let accessInfo;
   let userInfo;
   if (!(await AccessInfo.findOne({ email }))) {
     const result = new ApiResponse(
@@ -26,30 +38,46 @@ const loginController = async function (request, response) {
       ResponseMessage.NONEXISTINGUSERMESSAGE,
       null
     );
-    response.json(result);
+    return result;
   } else {
     if (roleId == 0 || roleId == undefined) {
-      userInfo = await AccessInfo.find({ email });
-      if (userInfo.length > 1) {
+      accessInfo = await AccessInfo.find({ email });
+      if (accessInfo.length > 1) {
         const result = new ApiResponse(
           ResponseCode.FAILURE,
           ResponseSubCode.MULTIPLEACCOUNT,
           ResponseMessage.MULTIPLEACCOUNT,
           null
         );
-        return response.json(result);
+        return result;
       }
     } else {
-      userInfo = await AccessInfo.findOne({ email, roleId });
+
+      accessInfo = await AccessInfo.findOne({ email, roleId });
     }
 
 
-    if (await comparePasswords(password, userInfo.password)) {
+    if (await comparePasswords(password, accessInfo.password)) {
+
+      let userInfo;
+      switch(accessInfo.roleId) {
+        case Roles.SELLER:
+          userInfo = await Seller.findOne({sellerId: accessInfo.sellerId });
+          break;
+
+          case Roles.BUYER:
+            userInfo = await Buyer.findOne({buyerId: accessInfo.buyerId });
+            break;
+
+        // Add other role cases if needed
+        default:
+          break;
+      }
       const token = jwt.sign(
         {
-          userId: userInfo.sellerId > 0 ? userInfo.sellerId : userInfo.buyerId,
-          email: userInfo.email,
-          roleId: userInfo.roleId,
+          userId: accessInfo.sellerId > 0 ? accessInfo.sellerId : accessInfo.buyerId,
+          email: accessInfo.email,
+          roleId: accessInfo.roleId,
         },
         process.env.SECRET_KEY
       );
@@ -57,9 +85,15 @@ const loginController = async function (request, response) {
         ResponseCode.SUCCESS,
         ResponseMessage.LOGINUSER,
         ResponseMessage.LOGINUSERMESSAGE,
-        { token }
+        {
+          token,
+          roleId,
+          firstName: userInfo.firstName,
+          lastName: userInfo.lastName,
+          email: accessInfo.email
+        }
       );
-      response.json(result);
+      return result;
     } else {
 
       const result = new ApiResponse(
@@ -68,7 +102,7 @@ const loginController = async function (request, response) {
         ResponseMessage.WRONGPASSMESSAGE,
         null
       );
-      response.json(result);
+      return result;
     }
   }
 };
@@ -84,4 +118,4 @@ connect()
     process.exit(1); // Exit the application if the database connection fails
   });
 
-module.exports = { loginController };
+module.exports = { Token,generateToken };

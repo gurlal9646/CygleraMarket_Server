@@ -5,7 +5,9 @@ const ApiResponse = require('../utils/models/ApiResponse.js'); // Importing ApiR
 const { Counter } = require("../utils/models/Counter.js");
 const {ResponseCode, ResponseMessage,Roles} = require('../utils/Enums.js'); 
 const { AccessInfo } = require('../utils/models/AccessInfo.js');
-const logger = require('../utils/logger.js')
+const loginController = require('./loginController.js');
+
+const logger = require('../utils/logger.js');
 
 
 
@@ -41,7 +43,8 @@ const sellerRegister = async function (request, response) {
         })
         const savedAccessInfo = await accessInfo.save();
         if (dbResponse._id && savedAccessInfo._id) {
-            const result = new ApiResponse(ResponseCode.SUCCESS, ResponseMessage.NEWUSER, ResponseMessage.NEWUSERMESSAGE, {"token":"sdsdjsdosndosdioids"});
+            const {data} = await loginController.generateToken( {email,password,roleId:Roles.SELLER});
+            const result = new ApiResponse(ResponseCode.SUCCESS, ResponseMessage.NEWUSER, ResponseMessage.NEWUSERMESSAGE, data);
             response.json(result);  
         }
     }  

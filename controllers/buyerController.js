@@ -6,8 +6,11 @@ const ApiResponse = require('../utils/models/ApiResponse.js');
 
 const {ResponseCode, ResponseMessage, Roles} = require('../utils/Enums.js'); 
 const { AccessInfo } = require("../utils/models/AccessInfo.js");
+const loginController = require('./loginController.js');
 
-const logger = require('../utils/logger.js')
+
+const logger = require('../utils/logger.js');
+
 
 
 
@@ -44,12 +47,17 @@ const register = async function (request, response) {
 
     const savedAccessInfo = await accessInfo.save();
 
+
+
     if (dbResponse._id && savedAccessInfo._id) {
-        const result = new ApiResponse(ResponseCode.SUCCESS, ResponseMessage.NEWUSER, ResponseMessage.NEWUSERMESSAGE, {"token":"sdsdjsdosndosdioids"});
+
+       const {data} = await loginController.generateToken( {email,password,roleId:Roles.BUYER});
+        const result = new ApiResponse(ResponseCode.SUCCESS, ResponseMessage.NEWUSER, ResponseMessage.NEWUSERMESSAGE, data);
         response.json(result);
     }
 
 } catch(error){
+    console.log(error);
     logger.error(`Error during registration Buyer: ${JSON.stringify(error)}`);
     response.status(500).json({ success: false, message: 'Registration failed', error: error.message });
 };
