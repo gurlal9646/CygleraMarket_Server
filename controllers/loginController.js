@@ -49,16 +49,10 @@ const loginController = async function (request, response) {
         {
           userId: userInfo.sellerId > 0 ? userInfo.sellerId : userInfo.buyerId,
           email: userInfo.email,
-          role: userInfo.roleId,
+          roleId: userInfo.roleId,
         },
         process.env.SECRET_KEY
       );
-
-      console.log( {
-        userId: userInfo.sellerId > 0 ? userInfo.sellerId : userInfo.buyerId,
-        email: userInfo.email,
-        role: userInfo.roleId,
-      });
       const result = new ApiResponse(
         ResponseCode.SUCCESS,
         ResponseMessage.LOGINUSER,
