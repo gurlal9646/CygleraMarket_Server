@@ -48,6 +48,11 @@ app.get("docs.json",(request,response)=>{
 })
 
 
+app.get("/", (request, response) => {
+  response.status(200).send("API is running");
+})
+
+
 const apiRouter = require("./routes/api");
 
 // Mount routers
