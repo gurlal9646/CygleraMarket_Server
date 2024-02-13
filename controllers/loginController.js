@@ -19,18 +19,15 @@ const { Buyer } = require("../utils/models/BuyerInfo.js");
 const Token = async function (request, response) {
   logger.info(`Login Request: ${JSON.stringify(request.body)}`);
   const { email, password, roleId } = request.body;
-
-  const { tokenResponse } = await generateToken({ email, password, roleId });
-
-  response.JSON(tokenResponse);
+  const tokenResponse  = await generateToken({ email, password, roleId });
+  response.json(tokenResponse);
 
 };
 
 
-const generateToken = async function({ email, password, roleId }){
+const generateToken = async ({ email, password, roleId })=>{
   
   let accessInfo;
-  let userInfo;
   if (!(await AccessInfo.findOne({ email }))) {
     const result = new ApiResponse(
       ResponseCode.FAILURE,
