@@ -18,7 +18,12 @@ const Token = async function (request, response) {
   logger.info(`Login Request: ${JSON.stringify(request.body)}`);
   const { email, password, roleId } = request.body;
   const tokenResponse = await generateToken({ email, password, roleId });
-  response.json(tokenResponse);
+  if(tokenResponse.code == ResponseCode.SUCCESS){
+    response.status(200).json(tokenResponse);
+  }
+  else{
+    response.status(422).json(tokenResponse);
+  }
 };
 
 const generateToken = async ({ email, password, roleId }) => {
@@ -84,7 +89,9 @@ const generateToken = async ({ email, password, roleId }) => {
     }
   } catch (error) {
     logger.error(`Error occurred in generateToken: ${error}`);
+    result.code = ResponseCode.FAILURE;
     result.subcode = 100;
+    result.message = '';
   }
   return result;
 };
