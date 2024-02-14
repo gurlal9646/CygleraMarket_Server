@@ -31,12 +31,15 @@ const generateToken = async ({ email, password, roleId }) => {
       result.message = ResponseMessage.NONEXISTINGUSERMESSAGE;
       return result;
     } else {
-      if (roleId == 0 || roleId == undefined) {
+      if (!roleId || roleId <= 0) {
         accessInfo = await AccessInfo.find({ email });
         if (accessInfo.length > 1) {
           result.subcode = ResponseSubCode.MULTIPLEACCOUNT;
           result.message = ResponseMessage.MULTIPLEACCOUNT;
           return result;
+        }
+        else{
+          accessInfo = accessInfo[0];
         }
       } else {
         accessInfo = await AccessInfo.findOne({ email, roleId });
