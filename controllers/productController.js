@@ -125,7 +125,7 @@ const deleteProduct = async (request, response) => {
 
     if (request.user.roleId === Roles.ADMIN) {
       // For admins, allow deletion of any product
-      deletedProduct = await Product.findOneAndDelete({ productId });
+      deletedProduct = await Product.findOneAndDelete({ _id: productId });
     } else if (request.user.roleId === Roles.SELLER) {
       console.log('inside seller del');
       // For sellers, allow deletion of only their own products
