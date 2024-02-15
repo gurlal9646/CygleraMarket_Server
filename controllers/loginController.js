@@ -74,7 +74,7 @@ const generateToken = async ({ email, password, roleId }) => {
         result.message = ResponseMessage.LOGINUSERMESSAGE;
         result.data = {
           token,
-          roleId,
+          roleId:accessInfo.roleId,
           firstName: userInfo.firstName,
           lastName: userInfo.lastName,
           email: accessInfo.email,
