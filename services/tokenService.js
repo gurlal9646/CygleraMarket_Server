@@ -3,7 +3,12 @@ const { AccessInfo } = require("../utils/models/AccessInfo.js");
 const { Seller } = require("../utils/models/SellerInfo.js");
 const { Buyer } = require("../utils/models/BuyerInfo.js");
 const { comparePasswords } = require("../utils/bcrypt.js");
-const { ResponseCode, ResponseSubCode, ResponseMessage, Roles } = require("../utils/Enums.js");
+const {
+  ResponseCode,
+  ResponseSubCode,
+  ResponseMessage,
+  Roles,
+} = require("../utils/Enums.js");
 const ApiResponse = require("../utils/models/ApiResponse.js");
 const logger = require("../utils/logger.js");
 
@@ -12,7 +17,7 @@ async function generateToken({ email, password, roleId }) {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
 
   try {
-    logger.info(`generateToken in service: ${email, password, roleId }`);
+    logger.info(`generateToken in service: ${(email, password, roleId)}`);
 
     if (!(await AccessInfo.findOne({ email }))) {
       result.subcode = ResponseSubCode.USERNOTEXISTS;
@@ -79,5 +84,15 @@ async function generateToken({ email, password, roleId }) {
   }
   return result;
 }
+
+connect()
+  .then((connectedClient) => {
+    client = connectedClient;
+  })
+  .catch((err) => {
+    console.error("Failed to connect to MongoDB", err);
+
+    process.exit(1); // Exit the application if the database connection fails
+  });
 
 module.exports = { generateToken };

@@ -1,9 +1,8 @@
-
 const express = require("express");
 
 const router = express.Router();
 
-const buyerController = require('../../controllers/buyerController');
+const buyerController = require("../../controllers/buyerController");
 
 /**
  * @swagger
@@ -27,6 +26,5 @@ const buyerController = require('../../controllers/buyerController');
 router.post("/register", buyerController.register);
 
 router.get("/getBuyers", buyerController.getBuyers);
-
 
 module.exports = router;

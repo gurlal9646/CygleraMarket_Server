@@ -13,13 +13,12 @@ class ResponseCode{
 class ResponseSubCode{
     static USERNOTEXISTS =1;
     static MULTIPLEACCOUNT = 2;
+    static EXCEPTION = 100;
 }
 
 class ResponseMessage{
 
-        static EXISTINGUSER = 'USER_ALREADY_EXISTS';
         static EXISTINGUSERMESSAGE = 'User with this email already exists';
-        static NEWUSER = 'REGISTERED_SUCCESSFULLY';
         static NEWUSERMESSAGE = 'User added';
         static NONEXISTINGUSERMESSAGE = 'User with this email does not exists';
         static LOGINUSER = 'LOGIN_SUCCESSFULL'
