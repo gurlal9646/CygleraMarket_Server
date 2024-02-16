@@ -80,7 +80,7 @@ const getAllBuyers = async () => {
     }
   } catch (error) {
     // Handle errors if any occur during the database operation
-    logger.error(`Error fetching buyers: ${JSON.stringify(error)}`);
+    logger.error(`Error fetching buyers: ${error}`);
     result.message = "Error fetching buyers";
     result.subcode = ResponseSubCode.EXCEPTION;
   }

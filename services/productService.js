@@ -8,6 +8,8 @@ const {
   Roles,
   ResponseSubCode,
 } = require("../utils/Enums.js");
+const logger = require("../utils/logger.js");
+
 
 const getPoducts = async (productId, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
@@ -33,7 +35,7 @@ const getPoducts = async (productId, user) => {
     }
   } catch (error) {
     // Handle errors if any occur during the database operation
-    logger.error(`Error fetching products: ${JSON.stringify(error)}`);
+    logger.error(`Error fetching products: ${error}`);
     result.message = "Unable to fetch products";
     result.subcode = ResponseSubCode.EXCEPTION;
   }
@@ -53,14 +55,14 @@ const saveProduct = async (product, user) => {
       // Update the existing product with the fields provided in the request body
       const updatedProduct = await Product.findOneAndUpdate(
         { productId },
-        { $set: request.body },
+        { $set: product },
         { new: true }
       );
 
       if (updatedProduct) {
         // Product updated successfully
         result.code = ResponseCode.SUCCESS;
-        result.message = ResponseMessage.UPDATED;
+        result.message = ResponseMessage.PRODUCTUPDATED;
         result.data = updatedProduct;
       } else {
         // Handle update failure
@@ -86,7 +88,7 @@ const saveProduct = async (product, user) => {
       }
     }
   } catch (error) {
-    logger.error(`Error during registration product: ${JSON.stringify(error)}`);
+    logger.error(`Error during registration product: ${error}`);
     result.message = "Unable to add or update product";
     result.subcode = ResponseSubCode.EXCEPTION;
   }
@@ -120,7 +122,7 @@ const removeProduct = async (productId, user) => {
     }
   } catch (error) {
     // Handle errors if any occur during the database operation
-    logger.error(`Error deleting product: ${JSON.stringify(error)}`);
+    logger.error(`Error deleting product: ${error}`);
     result.message = "Unable to delete product";
     result.subcode = ResponseSubCode.EXCEPTION;
   }

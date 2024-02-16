@@ -57,7 +57,7 @@ const registerSeller = async (seller) => {
       }
     }
   } catch (error) {
-    logger.error(`Error during registration Seller: ${JSON.stringify(error)}`);
+    logger.error(`Error during registration Seller: ${error}`);
     result.message = "Registration failed";
     result.subcode = ResponseSubCode.EXCEPTION;
   }
