@@ -37,8 +37,7 @@ const generateToken = async ({ email, password, roleId }) => {
           result.subcode = ResponseSubCode.MULTIPLEACCOUNT;
           result.message = ResponseMessage.MULTIPLEACCOUNT;
           return result;
-        }
-        else{
+        } else {
           accessInfo = accessInfo[0];
         }
       } else {
@@ -74,7 +73,7 @@ const generateToken = async ({ email, password, roleId }) => {
         result.message = ResponseMessage.LOGINUSERMESSAGE;
         result.data = {
           token,
-          roleId:accessInfo.roleId,
+          roleId: accessInfo.roleId,
           firstName: userInfo.firstName,
           lastName: userInfo.lastName,
           email: accessInfo.email,

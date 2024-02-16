@@ -11,26 +11,26 @@ const getProducts = async (request, response) => {
     logger.info(`Get Products enters:`);
     // Fetch all products from the database
     let products = [];
-    if (request.user.roleId === Roles.BUYER || request.user.roleId === Roles.ADMIN) {
-      products = await Product.find();
-    }
-    else (request.user.roleId === Roles.SELLER)
-    {
-      products = await Product.find({ sellerId: request.user.userId });
+    const product = await Product.findById(request.params.productId);
+    if (product) {
+      products.push(product);
+    } else {
+      if (
+        request.user.roleId === Roles.BUYER ||
+        request.user.roleId === Roles.ADMIN
+      ) {
+        products = await Product.find();
+      } else if (request.user.roleId === Roles.SELLER) {
+        products = await Product.find({ sellerId: request.user.userId });
+      }
     }
     if (products.length === 0) {
       apiResponse.message = ResponseMessage.NODATAFOUND;
-    }
-    else {
+    } else {
       apiResponse.code = ResponseCode.SUCCESS;
       apiResponse.data = products;
     }
-    const result = new ApiResponse(
-      ResponseCode.SUCCESS,
-      0,
-      '',
-      products
-    );
+    const result = new ApiResponse(ResponseCode.SUCCESS, 0, "", products);
     response.json(result);
   } catch (error) {
     // Handle errors if any occur during the database operation
@@ -38,9 +38,6 @@ const getProducts = async (request, response) => {
     response.status(500).json(apiResponse);
   }
 };
-
-
-
 
 const addProduct = async function (request, response) {
   logger.info(`Add Product: ${JSON.stringify(request.body)}`);
@@ -120,23 +117,18 @@ const deleteProduct = async (request, response) => {
   let apiResponse = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   try {
     const { productId } = request.params;
+    logger.info(`Delete Product ProductId: ${productId}`);
     let deletedProduct;
     console.log(request.user);
-
     if (request.user.roleId === Roles.ADMIN) {
       // For admins, allow deletion of any product
       deletedProduct = await Product.findOneAndDelete({ _id: productId });
     } else if (request.user.roleId === Roles.SELLER) {
-      console.log('inside seller del');
+      console.log("inside seller del");
       // For sellers, allow deletion of only their own products
-      deletedProduct = await Product.findOneAndDelete(
-        {
-          $and: [
-            { productId },
-            { sellerId: request.user.userId }
-          ]
-
-        });
+      deletedProduct = await Product.findOneAndDelete({
+        $and: [{ _id: productId }, { sellerId: request.user.userId }],
+      });
     }
 
     if (deletedProduct) {
@@ -152,20 +144,18 @@ const deleteProduct = async (request, response) => {
   } catch (error) {
     // Handle errors if any occur during the database operation
     logger.error(`Error deleting product: ${JSON.stringify(error)}`);
-    response.status(500).json(
-      new ApiResponse(
-        ResponseCode.FAILURE,
-        0,
-        ResponseMessage.PRODUCTNOTDELETED,
-        null
-      )
-    );
+    response
+      .status(500)
+      .json(
+        new ApiResponse(
+          ResponseCode.FAILURE,
+          0,
+          ResponseMessage.PRODUCTNOTDELETED,
+          null
+        )
+      );
   }
 };
-
-
-
-
 
 connect()
   .then((connectedClient) => {

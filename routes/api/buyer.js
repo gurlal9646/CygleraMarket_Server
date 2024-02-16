@@ -24,8 +24,9 @@ const buyerController = require('../../controllers/buyerController');
  *       '500':
  *         description: Internal Server Error
  */
-router.post("/buyer", buyerController.register);
-
 router.post("/register", buyerController.register);
+
+router.get("/getBuyers", buyerController.getBuyers);
+
 
 module.exports = router;

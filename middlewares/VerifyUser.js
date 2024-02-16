@@ -15,7 +15,7 @@ const verifyToken = (req, res, next) => {
   }
 
   let token = req.headers["x-access-token"] || req.headers["authorization"];
- logger.info(`Verifying JWT: ${token}`);
+ logger.info(`Verifying JWT: ${req.url} ${token}`);
 
   // If a token is found, remove 'Bearer ' if it's present
 
