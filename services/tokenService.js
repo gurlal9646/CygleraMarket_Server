@@ -1,3 +1,4 @@
+const { connect } = require("../utils/DataBase.js");
 const jwt = require("jsonwebtoken");
 const { AccessInfo } = require("../utils/models/AccessInfo.js");
 const { Seller } = require("../utils/models/SellerInfo.js");
