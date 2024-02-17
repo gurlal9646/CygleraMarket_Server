@@ -22,10 +22,10 @@ const getServices = async (serviceId, user) => {
       services.push(service);
     } else if (user.roleId === Roles.BUYER || user.roleId === Roles.ADMIN) {
       // Fetch all services if user type is admin or buyer
-      servies = await Service.find();
+      services = await Service.find();
     } else if (user.roleId === Roles.SELLER) {
       // Fetch all services related to specific seller
-      services = await Serive.find({ sellerId: user.userId });
+      services = await Service.find({ sellerId: user.userId });
     }
     if (services.length === 0) {
       result.message = ResponseMessage.NODATAFOUND;
