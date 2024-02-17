@@ -20,13 +20,13 @@ async function generateToken({ email, password, roleId }) {
   try {
     logger.info(`generateToken in service: ${(email, password, roleId)}`);
 
-    if (!(await AccessInfo.findOne({ email }))) {
+    if (!(await AccessInfo.findOne({ email: { $regex: email, $options: 'i' }}))) {
       result.subcode = ResponseSubCode.USERNOTEXISTS;
       result.message = ResponseMessage.NONEXISTINGUSERMESSAGE;
       return result;
     } else {
       if (!roleId || roleId <= 0) {
-        accessInfo = await AccessInfo.find({ email });
+        accessInfo = await AccessInfo.find({ email: { $regex: email, $options: 'i' }});
         if (accessInfo.length > 1) {
           result.subcode = ResponseSubCode.MULTIPLEACCOUNT;
           result.message = ResponseMessage.MULTIPLEACCOUNT;
@@ -35,7 +35,7 @@ async function generateToken({ email, password, roleId }) {
           accessInfo = accessInfo[0];
         }
       } else {
-        accessInfo = await AccessInfo.findOne({ email, roleId });
+        accessInfo = await AccessInfo.findOne({ email: { $regex: email, $options: 'i' }, roleId });
       }
       if (await comparePasswords(password, accessInfo.password)) {
         let userInfo;

@@ -18,7 +18,7 @@ const registerSeller = async (seller) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   logger.info(`Register Seller in service start ${Date.now()}`);
   try {
-    if (await Seller.findOne({ email })) {
+    if (await Seller.findOne({ email :{ $regex: email, $options: 'i' }})) {
       result.message = ResponseMessage.EXISTINGUSERMESSAGE;
       return result;
     } else {
@@ -41,7 +41,7 @@ const registerSeller = async (seller) => {
         email,
         password: encryptedPassword,
         sellerId: sellerId,
-        roleId: Roles.BUYER,
+        roleId: Roles.SELLER,
       });
 
       const savedAccessInfo = await accessInfo.save();

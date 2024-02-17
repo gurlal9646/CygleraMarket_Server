@@ -18,7 +18,7 @@ const registerBuyer = async (buyer) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   logger.info(`Register Buyer in service start ${Date.now()}`);
   try {
-    if (await Buyer.findOne({ email })) {
+    if (await Buyer.findOne({ email :{ $regex: email, $options: 'i' }})) {
       result.message = ResponseMessage.EXISTINGUSERMESSAGE;
       return result;
     } else {
