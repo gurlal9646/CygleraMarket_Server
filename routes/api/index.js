@@ -13,6 +13,8 @@ const buyersRouter = require("./buyer.js");
 const sellerRouter = require("./seller.js");
 const loginRouter = require("./login.js");
 const productRouter = require("./products.js");
+const serviceRouter = require("./services.js");
+
 
 const logger = require("../../utils/logger.js");
 
@@ -48,5 +50,6 @@ router.use("/buyer", buyersRouter);
 router.use("/seller", sellerRouter);
 router.use("/login", loginRouter);
 router.use("/product", productRouter);
+router.use("/service",serviceRouter);
 
 module.exports = router;
