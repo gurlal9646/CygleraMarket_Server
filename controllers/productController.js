@@ -1,5 +1,5 @@
 const {
-  getPoducts,
+  getProducts,
   saveProduct,
   removeProduct,
 } = require("../services/productService.js");
@@ -7,7 +7,7 @@ const logger = require("../utils/logger.js");
 
 const products = async (request, response) => {
   logger.info(`Register Seller: ${JSON.stringify(request.body)}`);
-  const result = await getPoducts(request.params.productId, request.user);
+  const result = await getrPoducts(request.params.productId, request.user);
   response.json(result);
 };
 

@@ -11,7 +11,7 @@ const {
 const logger = require("../utils/logger.js");
 
 
-const getPoducts = async (productId, user) => {
+const getProducts = async (productId, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   try {
     logger.info(`Get products in service start ${Date.now()}`);
@@ -140,4 +140,4 @@ connect()
     process.exit(1); // Exit the application if the database connection fails
   });
 
-module.exports = { getPoducts, saveProduct, removeProduct };
+module.exports = { getProducts, saveProduct, removeProduct };
