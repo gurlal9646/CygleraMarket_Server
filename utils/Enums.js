@@ -35,6 +35,15 @@ class ResponseMessage{
         static PRODUCTNOTFOUND = 'Product not found';
         static PRODUCTNOTDELETED = 'Product not deleted';
 
+        static SERVICEADDED = 'Service added';
+        static SERVICENOTADDED = 'Service not added';
+        static SERVICEUPDATED = 'Service updated';
+        static SERVICENOTUPDATED = 'Service not updated';
+        static NODATAFOUND ='No data found';
+        static SERVICEDELETED = 'Service deleted';
+        static SERVICENOTFOUND = 'Service not found';
+        static SERVICENOTDELETED = 'Service not deleted';
+
 
 
 
