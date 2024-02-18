@@ -22,7 +22,7 @@ const getServices = async (serviceId, user) => {
       services.push(service);
     } else if (user.roleId === Roles.BUYER || user.roleId === Roles.ADMIN) {
       // Fetch all services if user type is admin or buyer
-      services = await Product.aggregate([
+      services = await Service.aggregate([
         {
           $lookup: {
             from: "Service", // Name of the Seller collection
