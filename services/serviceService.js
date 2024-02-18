@@ -22,10 +22,31 @@ const getServices = async (serviceId, user) => {
       services.push(service);
     } else if (user.roleId === Roles.BUYER || user.roleId === Roles.ADMIN) {
       // Fetch all services if user type is admin or buyer
-      services = await Service.find();
+      services = await Product.aggregate([
+        {
+          $lookup: {
+            from: "Service", // Name of the Seller collection
+            localField: "sellerId",
+            foreignField: "sellerId", // Common attribute name in the Seller collection
+            as: "seller",
+          },
+        },
+        {
+          $unwind: "$seller", // Unwind the 'seller' array to get a single seller object
+        },
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+            description: 1,
+            price: 1,
+            "seller.companyName": 1,
+          },
+        },
+      ]);
     } else if (user.roleId === Roles.SELLER) {
       // Fetch all services related to specific seller
-      services = await Service.find({ sellerId: user.userId });
+      services = await Service.find({ sellerId: user.userId },'_id name  description price createdAt');
     }
     if (services.length === 0) {
       result.message = ResponseMessage.NODATAFOUND;
