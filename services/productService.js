@@ -10,7 +10,6 @@ const {
 } = require("../utils/Enums.js");
 const logger = require("../utils/logger.js");
 
-
 const getProducts = async (productId, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   try {
@@ -22,10 +21,36 @@ const getProducts = async (productId, user) => {
       products.push(product);
     } else if (user.roleId === Roles.BUYER || user.roleId === Roles.ADMIN) {
       // Fetch all products if user type is admin or buyer
-      products = await Product.find();
+      products = await Product.aggregate([
+        {
+          $lookup: {
+            from: "Seller", // Name of the Seller collection
+            localField: "sellerId",
+            foreignField: "sellerId", // Common attribute name in the Seller collection
+            as: "seller",
+          },
+        },
+        {
+          $unwind: "$seller", // Unwind the 'seller' array to get a single seller object
+        },
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+            description: 1,
+            price: 1,
+            category: 1,
+            manufacturer: 1,
+            stockQuantity:1,
+            "seller.companyName": 1,
+            "seller._id":1
+          },
+        },
+      ]);
+
     } else if (user.roleId === Roles.SELLER) {
       // Fetch all products related to specific seller
-      products = await Product.find({ sellerId: user.userId });
+      products = await Product.find({ sellerId: user.userId },'_id name  description price category manufacturer expiryDate createdAt');
     }
     if (products.length === 0) {
       result.message = ResponseMessage.NODATAFOUND;

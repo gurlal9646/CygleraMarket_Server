@@ -2,41 +2,93 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const sellerSchema = new Schema({
-    sellerId:Number,
-    firstName: String,
-    lastName: String,
-    email:String,
-    countryCode:String,
-    phoneNumber:String,
-    companyName:String,
-    category:String,
-    status: String,
-    companySize: String,
-    businessNumber: String,
-    streetAddress: String,
-    city: String,
-    state: String,
-    country:String,
-    postalCode: String,
-    password: String,
+    sellerId: {
+        type: Number,
+        required: true
+    },
+    firstName: {
+        type: String,
+        required: true
+    },
+    lastName: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    countryCode: {
+        type: String,
+        required: true
+    },
+    phoneNumber: {
+        type: String,
+        required: true
+    },
+    companyName: {
+        type: String,
+        required: true
+    },
+    category: {
+        type: String,
+        required: true
+    },
+    status: {
+        type: String,
+        required: true
+    },
+    companySize: {
+        type: String,
+        required: true
+    },
+    businessNumber: {
+        type: String,
+        required: true
+    },
+    streetAddress: {
+        type: String,
+        required: true
+    },
+    city: {
+        type: String,
+        required: true
+    },
+    state: {
+        type: String,
+        required: true
+    },
+    country: {
+        type: String,
+        required: true
+    },
+    postalCode: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
     createdAt: {
         type: Date,
-        default: Date.now, // Set default value to the current date
-      },
-      createdBy: {
-        type: Number,
-        default: null,
-      },
-      updatedAt: {
-        type: Date,
-        default: null, // Set default value to null
-      },
-      updatedBy: {
-        type: Number,
-        default: null, // Set default value to null
-      },
-  });
-  
-const Seller = mongoose.model('seller', sellerSchema,'Seller');
+        default: Date.now,
+        required: true
+    },
+    createdBy: {
+      type: Number,
+      default: null,
+  },
+  updatedAt: {
+      type: Date,
+      default: null,
+  },
+  updatedBy: {
+      type: Number,
+      default: null,
+  }
+});
 
-module.exports = {Seller} ;
+const Seller = mongoose.model('seller', sellerSchema, 'Seller');
+
+module.exports = { Seller };

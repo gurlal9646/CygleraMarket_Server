@@ -6,7 +6,7 @@ const {
   const logger = require("../utils/logger.js");
   
   const services = async (request, response) => {
-    logger.info(`Register Seller: ${JSON.stringify(request.body)}`);
+    logger.info(`Get Services: ${JSON.stringify(request.body)}`);
     const result = await getServices(request.params.serviceId, request.user);
     response.json(result);
   };
