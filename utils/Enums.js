@@ -39,10 +39,17 @@ class ResponseMessage{
         static SERVICENOTADDED = 'Service not added';
         static SERVICEUPDATED = 'Service updated';
         static SERVICENOTUPDATED = 'Service not updated';
-        static NODATAFOUND ='No data found';
         static SERVICEDELETED = 'Service deleted';
         static SERVICENOTFOUND = 'Service not found';
         static SERVICENOTDELETED = 'Service not deleted';
+
+        static PROGRAMADDED = 'Program added';
+        static PROGRAMNOTADDED = 'Program not added';
+        static PROGRAMUPDATED = 'Program updated';
+        static PROGRAMNOTUPDATED = 'Program not updated';
+        static PROGRAMDELETED = 'Program deleted';
+        static PROGRAMNOTFOUND = 'Program not found';
+        static PROGRAMNOTDELETED = 'Program not deleted';
 
 
 
