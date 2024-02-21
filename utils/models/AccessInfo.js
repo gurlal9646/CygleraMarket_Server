@@ -2,44 +2,57 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const accessInfoSchema = new Schema({
-    accessInfoId: Number,
-    email:String,
-    password: String,
+    accessInfoId: {
+        type: Number,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
     isLocked: {
         type: Boolean,
-        default: false
-      },
-      buyerId: {
+        default: false,
+        required: true
+    },
+    buyerId: {
         type: Number,
-        default: 0
-      },
-      sellerId: {
+        default: 0,
+        required: true
+    },
+    sellerId: {
         type: Number,
-        default: 0
-      },
-      roleId: {
+        default: 0,
+        required: true
+    },
+    roleId: {
         type: Number,
-        default: 0
-      },
+        default: 0,
+        required: true
+    },
     createdAt: {
         type: Date,
-        default: Date.now, // Set default value to the current date
-      },
-      
-      createdBy: {
+        default: Date.now,
+        required: true
+    },
+    createdBy: {
         type: Number,
         default: null,
-      },
-      updatedAt: {
+    },
+    updatedAt: {
         type: Date,
-        default: null, // Set default value to null
-      },
-      updatedBy: {
+        default: null,
+    },
+    updatedBy: {
         type: Number,
-        default: null, // Set default value to null
-      },
-  });
-  
-const AccessInfo = mongoose.model('accessInfo', accessInfoSchema,'AccessInfo');
+        default: null,
+    }
+});
 
-module.exports = {AccessInfo} ;
+const AccessInfo = mongoose.model('accessInfo', accessInfoSchema, 'AccessInfo');
+
+module.exports = { AccessInfo };

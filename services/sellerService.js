@@ -75,4 +75,15 @@ connect()
     process.exit(1); // Exit the application if the database connection fails
   });
 
-module.exports = { registerSeller };
+
+  const getSellerId = async (_id)=>{
+    let dbResponse = await Seller.findOne({_id});
+    console.log(dbResponse);
+    if(dbResponse){
+         return dbResponse.sellerId;
+    }
+    return 0;
+
+  };
+
+module.exports = { registerSeller,getSellerId };

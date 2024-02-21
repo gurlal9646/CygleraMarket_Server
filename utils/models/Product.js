@@ -2,8 +2,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const productSchema = new Schema({
-    productId: Number,
-    sellerId: Number,
+    productId: {
+        type: Number,
+        required: true
+    },
+    sellerId: {
+        type: Number,
+        required: true
+    },
     name: {
         type: String,
         required: true
@@ -17,8 +23,14 @@ const productSchema = new Schema({
         required: true,
         min: 1
     },
-    category: String,
-    manufacturer: String,
+    category: {
+        type: String,
+        required: true
+    },
+    manufacturer: {
+        type: String,
+        required: true
+    },
     stockQuantity: {
         type: Number,
         required: true,
@@ -26,24 +38,29 @@ const productSchema = new Schema({
     },
     expiryDate: {
         type: Date,
-        default: null // Set default value to null
+        default: null,
+        required: true
     },
-    storageConditions: String,
+    storageConditions: {
+        type: String,
+        required: true
+    },
     createdAt: {
         type: Date,
-        default: Date.now // Set default value to the current date
+        default: Date.now,
+        required: true
     },
     createdBy: {
         type: Number,
-        default: null
+        default: null,
     },
     updatedAt: {
         type: Date,
-        default: null // Set default value to null
+        default: null,
     },
     updatedBy: {
         type: Number,
-        default: null // Set default value to null
+        default: null,
     }
 });
 

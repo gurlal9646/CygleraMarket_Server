@@ -18,7 +18,7 @@ async function generateToken({ email, password, roleId }) {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
 
   try {
-    logger.info(`generateToken in service: ${(email, password, roleId)}`);
+    logger.info(`generateToken in service: ${email, password, roleId}`);
 
     if (!(await AccessInfo.findOne({ email: { $regex: email, $options: 'i' }}))) {
       result.subcode = ResponseSubCode.USERNOTEXISTS;
@@ -71,6 +71,7 @@ async function generateToken({ email, password, roleId }) {
           firstName: userInfo.firstName,
           lastName: userInfo.lastName,
           email: accessInfo.email,
+          uniqueId:userInfo._id
         };
         return result;
       } else {

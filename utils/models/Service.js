@@ -2,8 +2,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const serviceSchema = new Schema({
-    serviceId: Number,
-    sellerId: Number,
+    serviceId: {
+        type: Number,
+        required: true
+    },
+    sellerId: {
+        type: Number,
+        required: true
+    },
     name: {
         type: String,
         required: true
@@ -17,22 +23,22 @@ const serviceSchema = new Schema({
         required: true,
         min: 1
     },
-    
     createdAt: {
         type: Date,
-        default: Date.now // Set default value to the current date
+        default: Date.now,
+        required: true
     },
     createdBy: {
         type: Number,
-        default: null
+        default: null,
     },
     updatedAt: {
         type: Date,
-        default: null // Set default value to null
+        default: null,
     },
     updatedBy: {
         type: Number,
-        default: null // Set default value to null
+        default: null,
     }
 });
 

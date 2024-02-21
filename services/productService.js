@@ -43,6 +43,7 @@ const getProducts = async (productId, user) => {
             manufacturer: 1,
             stockQuantity:1,
             "seller.companyName": 1,
+            "seller._id":1
           },
         },
       ]);
