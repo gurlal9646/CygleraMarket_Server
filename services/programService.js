@@ -16,15 +16,15 @@ const getPrograms = async (programId, user) => {
   try {
     logger.info(`Get program in service start ${Date.now()}`);
     let programs = [];
-    // Fetch product based on the Id
+    // Fetch Program based on the Id
     const program = await Program.findById(programId);
     if (program) {
       programs.push(program);
     } else if (user.roleId === Roles.BUYER || user.roleId === Roles.ADMIN) {
-      // Fetch all products if user type is admin or buyer
+      // Fetch all Programs if user type is admin or buyer
       programs = await Program.find();
     } else if (user.roleId === Roles.SELLER) {
-      // Fetch all products related to specific seller
+      // Fetch all Programs related to specific seller
       programs = await Program.find({ sellerId: user.userId });
     }
     if (programs.length === 0) {
@@ -48,11 +48,11 @@ const saveProgram = async (program, user) => {
   try {
     const { programId } = program;
 
-    // Check if the product with the given productId exists
+    // Check if the Program with the given ProgramId exists
     const existingProgram = await Program.findOne({ programId });
 
     if (existingProgram) {
-      // Update the existing product with the fields provided in the request body
+      // Update the existing Program with the fields provided in the request body
       const updatedProgram = await Program.findOneAndUpdate(
         { programId },
         { $set: program },
@@ -60,7 +60,7 @@ const saveProgram = async (program, user) => {
       );
 
       if (updatedProgram) {
-        // Product updated successfully
+        // Program updated successfully
         result.code = ResponseCode.SUCCESS;
         result.message = ResponseMessage.PRODUCTUPDATED;
         result.data = updatedProgram;
@@ -69,7 +69,7 @@ const saveProgram = async (program, user) => {
         result.message = ResponseMessage.PROGRAMNOTUPDATED;
       }
     } else {
-      // Product does not exist, create a new one
+      // Program does not exist, create a new one
       const counter = await Counter.findOneAndUpdate(
         { name: "programId" },
         { $inc: { value: 1 } },
@@ -78,7 +78,7 @@ const saveProgram = async (program, user) => {
       program.programId = counter.value;
       program.sellerId = user.userId;
 
-      // Create the new product
+      // Create the new Program
       let dbResponse = await Program.create(program);
 
       if (dbResponse._id) {
@@ -102,22 +102,22 @@ const removeProgram = async (programId, user) => {
     logger.info(`Remove program in service start ${Date.now()}`);
     let deletedProgram;
     if (user.roleId === Roles.ADMIN) {
-      // For admins, allow deletion of any product
+      // For admins, allow deletion of any Program
       deletedProgram = await Program.findOneAndDelete({ _id: programId });
     } else if (user.roleId === Roles.SELLER) {
-      // For sellers, allow deletion of only their own products
+      // For sellers, allow deletion of only their own Programs
       deletedProgram = await Program.findOneAndDelete({
         $and: [{ _id: programId }, { sellerId: user.userId }],
       });
     }
 
     if (deletedProgram) {
-      // Product deleted successfully
+      // Program deleted successfully
       result.code = ResponseCode.SUCCESS;
       result.message = ResponseMessage.PROGRAMDELETED;
       result.data = deletedProgram;
     } else {
-      // Product not found or unauthorized deletion attempt
+      // Program not found or unauthorized deletion attempt
       result.message = ResponseMessage.PROGRAMNOTFOUND;
     }
   } catch (error) {

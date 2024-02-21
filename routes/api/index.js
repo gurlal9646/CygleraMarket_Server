@@ -12,6 +12,7 @@ const buyersRouter = require("./buyer.js");
 const sellerRouter = require("./seller.js");
 const loginRouter = require("./login.js");
 const productRouter = require("./products.js");
+const programRouter = require("./programs.js");
 const serviceRouter = require("./services.js");
 const rfaRouter = require("./requestForApproval.js");
 
@@ -50,6 +51,7 @@ router.use("/buyer", buyersRouter);
 router.use("/seller", sellerRouter);
 router.use("/login", loginRouter);
 router.use("/product", productRouter);
+router.use("/program", programRouter);
 router.use("/service",serviceRouter);
 router.use("/rfa",rfaRouter);
 
