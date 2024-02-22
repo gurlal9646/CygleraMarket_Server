@@ -36,8 +36,16 @@ const registerBuyer = async (buyer) => {
       //Adding data into buyer table
       let dbResponse = await Buyer.create(buyer);
 
+      const counterAccessInfo = await Counter.findOneAndUpdate(
+        { name: "accessInfoId" },
+        { $inc: { value: 1 } },
+        { new: true, upsert: true }
+      );
+      const accessInfoId  = counterAccessInfo.value;
+
       //Adding data into Accessinfo table
       let accessInfo = new AccessInfo({
+        accessInfoId,
         email,
         password: encryptedPassword,
         buyerId: buyerId,
