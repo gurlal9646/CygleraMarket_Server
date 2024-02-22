@@ -43,6 +43,6 @@ const programSchema = new Schema({
     }
 });
 
-const Service = mongoose.model('program', programSchema, 'Program');
+const Program = mongoose.model('program', programSchema, 'Program');
 
 module.exports = { Program };
