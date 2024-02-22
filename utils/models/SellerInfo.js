@@ -67,9 +67,8 @@ const sellerSchema = new Schema({
         required: true
     },
     password: {
-        type: String,
-        required: true
-    },
+        type: String
+        },
     createdAt: {
         type: Date,
         default: Date.now,
