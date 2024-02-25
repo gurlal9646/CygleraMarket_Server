@@ -1,7 +1,6 @@
 const { connect } = require("../utils/DataBase.js");
 const { RequestForApproval } = require("../utils/models/RequestForApproval.js");
 const ApiResponse = require("../utils/models/ApiResponse.js");
-const { Counter } = require("../utils/models/Counter.js");
 const {
   ResponseCode,
   ResponseMessage,
@@ -9,6 +8,8 @@ const {
 } = require("../utils/Enums.js");
 const logger = require("../utils/logger.js");
 const { getSellerId } = require("./sellerService.js");
+const { v4: uuidv4 } = require('uuid');
+
 
 const getApprovals= async (requestId, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
@@ -94,12 +95,7 @@ const saveRequest = async (request, user) => {
       }
     } else {
       // Product does not exist, create a new one
-      const counter = await Counter.findOneAndUpdate(
-        { name: "requestId" },
-        { $inc: { value: 1 } },
-        { new: true, upsert: true }
-      );
-      request.requestId = counter.value;
+      request.requestId = uuidv4();
       request.buyerId = user.userId;
       request.sellerId = await getSellerId(request.sellerUniqueId);
 

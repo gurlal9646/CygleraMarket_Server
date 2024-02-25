@@ -1,7 +1,6 @@
 const { connect } = require("../utils/DataBase.js");
 const { encryptPassword } = require("../utils/bcrypt.js");
 const { Buyer } = require("../utils/models/BuyerInfo.js");
-const { Counter } = require("../utils/models/Counter.js");
 const ApiResponse = require("../utils/models/ApiResponse.js");
 const {
   ResponseCode,
@@ -12,6 +11,8 @@ const {
 const { AccessInfo } = require("../utils/models/AccessInfo.js");
 const { generateToken } = require("../services/tokenService");
 const logger = require("../utils/logger.js");
+const { v4: uuidv4 } = require('uuid');
+
 
 const registerBuyer = async (buyer) => {
   const { email } = buyer;
@@ -22,12 +23,8 @@ const registerBuyer = async (buyer) => {
       result.message = ResponseMessage.EXISTINGUSERMESSAGE;
       return result;
     } else {
-      const counter = await Counter.findOneAndUpdate(
-        { name: "buyerId" },
-        { $inc: { value: 1 } },
-        { new: true, upsert: true }
-      );
-      buyer.buyerId = counter.value;
+
+      buyer.buyerId = uuidv4();
 
       const { password, buyerId } = buyer;
       const encryptedPassword = await encryptPassword(password);
@@ -36,12 +33,7 @@ const registerBuyer = async (buyer) => {
       //Adding data into buyer table
       let dbResponse = await Buyer.create(buyer);
 
-      const counterAccessInfo = await Counter.findOneAndUpdate(
-        { name: "accessInfoId" },
-        { $inc: { value: 1 } },
-        { new: true, upsert: true }
-      );
-      const accessInfoId  = counterAccessInfo.value;
+      const accessInfoId  = uuidv4();
 
       //Adding data into Accessinfo table
       let accessInfo = new AccessInfo({

@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const accessInfoSchema = new Schema({
     accessInfoId: {
-        type: Number,
+        type:String,
         required: true
     },
     email: {

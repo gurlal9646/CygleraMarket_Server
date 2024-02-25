@@ -13,20 +13,24 @@ const {
 const ApiResponse = require("../utils/models/ApiResponse.js");
 const logger = require("../utils/logger.js");
 
-async function generateToken({ email, password, roleId }) {
+const generateToken = async ({ email, password, roleId }) => {
   let accessInfo;
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
 
   try {
-    logger.info(`generateToken in service: ${email, password, roleId}`);
+    logger.info(`generateToken in service: ${(email, password, roleId)}`);
 
-    if (!(await AccessInfo.findOne({ email: { $regex: email, $options: 'i' }}))) {
+    if (
+      !(await AccessInfo.findOne({ email: { $regex: email, $options: "i" } }))
+    ) {
       result.subcode = ResponseSubCode.USERNOTEXISTS;
       result.message = ResponseMessage.NONEXISTINGUSERMESSAGE;
       return result;
     } else {
       if (!roleId || roleId <= 0) {
-        accessInfo = await AccessInfo.find({ email: { $regex: email, $options: 'i' }});
+        accessInfo = await AccessInfo.find({
+          email: { $regex: email, $options: "i" },
+        });
         if (accessInfo.length > 1) {
           result.subcode = ResponseSubCode.MULTIPLEACCOUNT;
           result.message = ResponseMessage.MULTIPLEACCOUNT;
@@ -35,7 +39,10 @@ async function generateToken({ email, password, roleId }) {
           accessInfo = accessInfo[0];
         }
       } else {
-        accessInfo = await AccessInfo.findOne({ email: { $regex: email, $options: 'i' }, roleId });
+        accessInfo = await AccessInfo.findOne({
+          email: { $regex: email, $options: "i" },
+          roleId,
+        });
       }
       if (await comparePasswords(password, accessInfo.password)) {
         let userInfo;
@@ -71,7 +78,7 @@ async function generateToken({ email, password, roleId }) {
           firstName: userInfo.firstName,
           lastName: userInfo.lastName,
           email: accessInfo.email,
-          uniqueId:userInfo._id
+          uniqueId: userInfo._id,
         };
         return result;
       } else {
@@ -85,7 +92,7 @@ async function generateToken({ email, password, roleId }) {
     result.subcode = 100;
   }
   return result;
-}
+};
 
 connect()
   .then((connectedClient) => {

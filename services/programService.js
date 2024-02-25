@@ -1,7 +1,6 @@
 const { connect } = require("../utils/DataBase.js");
 const { Program } = require("../utils/models/Program.js");
 const ApiResponse = require("../utils/models/ApiResponse.js");
-const { Counter } = require("../utils/models/Counter.js");
 const {
   ResponseCode,
   ResponseMessage,
@@ -9,6 +8,8 @@ const {
   ResponseSubCode,
 } = require("../utils/Enums.js");
 const logger = require("../utils/logger.js");
+const { v4: uuidv4 } = require('uuid');
+
 
 
 const getPrograms = async (programId, user) => {
@@ -70,12 +71,7 @@ const saveProgram = async (program, user) => {
       }
     } else {
       // Program does not exist, create a new one
-      const counter = await Counter.findOneAndUpdate(
-        { name: "programId" },
-        { $inc: { value: 1 } },
-        { new: true, upsert: true }
-      );
-      program.programId = counter.value;
+      program.programId = uuidv4();
       program.sellerId = user.userId;
 
       // Create the new Program

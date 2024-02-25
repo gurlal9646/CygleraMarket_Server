@@ -1,7 +1,6 @@
 const { connect } = require("../utils/DataBase.js");
 const { Service } = require("../utils/models/Service.js");
 const ApiResponse = require("../utils/models/ApiResponse.js");
-const { Counter } = require("../utils/models/Counter.js");
 const {
   ResponseCode,
   ResponseMessage,
@@ -9,6 +8,8 @@ const {
   ResponseSubCode,
 } = require("../utils/Enums.js");
 const logger = require("../utils/logger.js");
+const { v4: uuidv4 } = require('uuid');
+
 
 
 const getServices = async (serviceId, user) => {
@@ -91,12 +92,8 @@ const saveService = async (service, user) => {
       }
     } else {
       // Service does not exist, create a new one
-      const counter = await Counter.findOneAndUpdate(
-        { name: "serviceId" },
-        { $inc: { value: 1 } },
-        { new: true, upsert: true }
-      );
-      service.serviceId = counter.value;
+
+      service.serviceId = uuidv4();
       service.sellerId = user.userId;
 
       // Create the new service

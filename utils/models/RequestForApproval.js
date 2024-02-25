@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const requestForApprovalSchema = new Schema({
   requestId: {
-    type: Number,
+    type: String,
     required: true,
   },
   type: {
