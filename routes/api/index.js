@@ -15,6 +15,9 @@ const productRouter = require("./products.js");
 const programRouter = require("./programs.js");
 const serviceRouter = require("./services.js");
 const rfaRouter = require("./requestForApproval.js");
+const contractRouter = require("./contracts.js");
+
+
 
 
 
@@ -54,5 +57,7 @@ router.use("/product", productRouter);
 router.use("/program", programRouter);
 router.use("/service",serviceRouter);
 router.use("/rfa",rfaRouter);
+router.use("/contract", contractRouter);
+
 
 module.exports = router;

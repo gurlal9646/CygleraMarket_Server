@@ -55,6 +55,14 @@ class ResponseMessage{
         static PROGRAMNOTFOUND = 'Program not found';
         static PROGRAMNOTDELETED = 'Program not deleted';
 
+        static CONTRACTADDED = 'Contract added';
+        static CONTRACTNOTADDED = 'Contract not added';
+        static CONTRACTUPDATED = 'Contract updated';
+        static CONTRACTNOTUPDATED = 'Contract not updated';
+        static CONTRACTDELETED = 'Contract deleted';
+        static CONTRACTNOTFOUND = 'Contract not found';
+        static CONTRACTNOTDELETED = 'Contract not deleted';
+
 
 
 
