@@ -58,6 +58,6 @@ const contractSchema = new Schema({
   },
 });
 
-const Product = mongoose.model("contract", contractSchema, "Contract");
+const Contract = mongoose.model("contract", contractSchema, "Contract");
 
 module.exports = { Contract };
