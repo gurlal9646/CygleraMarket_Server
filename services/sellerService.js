@@ -75,10 +75,33 @@ connect()
     process.exit(1); // Exit the application if the database connection fails
   });
 
+  const getAllSellers = async () => {
+    let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
+    try {
+      logger.info(`Get Sellers in service start ${Date.now()}`);
+      // Fetch all buyers from the database
+      let sellers = await Seller.find();
+  
+      if (sellers.length === 0) {
+        result.message = ResponseMessage.NODATAFOUND;
+      } else {
+        result.code = ResponseCode.SUCCESS;
+        result.data = sellers;
+      }
+    } catch (error) {
+      // Handle errors if any occur during the database operation
+      logger.error(`Error fetching sellers: ${error}`);
+      result.message = "Error fetching sellers";
+      result.subcode = ResponseSubCode.EXCEPTION;
+    }
+    logger.info(`Get Sellers in service end ${Date.now()}`);
+    return result;
+  };
+  
+
 
   const getSellerId = async (_id)=>{
     let dbResponse = await Seller.findOne({_id});
-    console.log(dbResponse);
     if(dbResponse){
          return dbResponse.sellerId;
     }
@@ -86,4 +109,4 @@ connect()
 
   };
 
-module.exports = { registerSeller,getSellerId };
+module.exports = { registerSeller,getSellerId,getAllSellers };

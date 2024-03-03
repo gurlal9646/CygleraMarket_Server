@@ -15,11 +15,11 @@ const contractSchema = new Schema({
     required: true,
   },
   sellerId: {
-    type: Number,
+    type: String,
     required: true,
   },
   buyerId: {
-    type: Number,
+    type: String,
     required: true,
   },
   price: {

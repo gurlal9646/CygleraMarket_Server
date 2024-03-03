@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const programSchema = new Schema({
   programId: { type: String, required: true },
-  sellerId: { type: Number, required: true },
+  sellerId: { type: String, required: true },
   name: {
     type: String,
     required: true,

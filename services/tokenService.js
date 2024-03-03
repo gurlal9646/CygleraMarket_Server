@@ -61,7 +61,7 @@ const generateToken = async ({ email, password, roleId }) => {
         const token = jwt.sign(
           {
             userId:
-              accessInfo.sellerId > 0
+              accessInfo.sellerId 
                 ? accessInfo.sellerId
                 : accessInfo.buyerId,
             email: accessInfo.email,
