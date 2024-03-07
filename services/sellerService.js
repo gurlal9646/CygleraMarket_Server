@@ -100,13 +100,5 @@ connect()
   
 
 
-  const getSellerId = async (_id)=>{
-    let dbResponse = await Seller.findOne({_id});
-    if(dbResponse){
-         return dbResponse.sellerId;
-    }
-    return 0;
 
-  };
-
-module.exports = { registerSeller,getSellerId,getAllSellers };
+module.exports = { registerSeller,getAllSellers };

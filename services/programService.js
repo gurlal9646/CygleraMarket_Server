@@ -17,22 +17,51 @@ const getPrograms = async (programId, user) => {
   try {
     logger.info(`Get program in service start ${Date.now()}`);
     let programs = [];
+
     // Fetch Program based on the Id
-    const program = await Program.findById(programId);
-    if (program) {
-      programs.push(program);
-    } else if (user.roleId === Roles.BUYER || user.roleId === Roles.ADMIN) {
-      // Fetch all Programs if user type is admin or buyer
-      programs = await Program.find();
-    } else if (user.roleId === Roles.SELLER) {
-      // Fetch all Programs related to specific seller
-      programs = await Program.find({ sellerId: user.userId });
+    if(programId){
+      programs = await Program.find({programId:programId});
+
+    }else{
+      if (user.roleId === Roles.BUYER || user.roleId === Roles.ADMIN) {
+        // Fetch all Programs if user type is admin or buyer
+
+        programs = await Program.aggregate([
+          {
+            $lookup: {
+              from: "Service", // Name of the Seller collection
+              localField: "sellerId",
+              foreignField: "sellerId", // Common attribute name in the Seller collection
+              as: "seller",
+            },
+          },
+          {
+            $unwind: "$seller", // Unwind the 'seller' array to get a single seller object
+          },
+          {
+            $project: {
+              programId: 1,
+              name: 1,
+              description: 1,
+              price: 1,
+              startDate:1,
+              endDate:1,
+              "seller.companyName": 1,
+              "seller.sellerId":1
+            },
+          },
+        ]);
+      } else if (user.roleId === Roles.SELLER) {
+        // Fetch all Programs related to specific seller
+        programs = await Program.find({ sellerId: user.userId });
+      }
     }
+
     if (programs.length === 0) {
       result.message = ResponseMessage.NODATAFOUND;
     } else {
       result.code = ResponseCode.SUCCESS;
-      result.data = products;
+      result.data = programs;
     }
   } catch (error) {
     // Handle errors if any occur during the database operation

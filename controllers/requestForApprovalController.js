@@ -6,7 +6,7 @@ const {
 
   const fetchApprovals = async function (request, response) {
     logger.info(`Get Approvals: ${JSON.stringify(request.body)}`);
-    const result = await getApprovals(request.body, request.user);
+    const result = await getApprovals(request.params.requestId, request.user);
     response.json(result);
   };
   
@@ -17,5 +17,5 @@ const {
   };
   
   
-  module.exports = { addRequest };
+  module.exports = { addRequest,fetchApprovals };
   

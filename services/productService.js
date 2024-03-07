@@ -36,7 +36,7 @@ const getProducts = async (productId, user) => {
         },
         {
           $project: {
-            _id: 1,
+            productId: 1,
             name: 1,
             description: 1,
             price: 1,
@@ -44,7 +44,7 @@ const getProducts = async (productId, user) => {
             manufacturer: 1,
             stockQuantity:1,
             "seller.companyName": 1,
-            "seller._id":1
+            "seller.sellerId":1
           },
         },
       ]);

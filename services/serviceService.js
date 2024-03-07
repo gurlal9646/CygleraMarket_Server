@@ -37,11 +37,12 @@ const getServices = async (serviceId, user) => {
         },
         {
           $project: {
-            _id: 1,
+            serviceId: 1,
             name: 1,
             description: 1,
             price: 1,
             "seller.companyName": 1,
+            "seller.sellerId":1
           },
         },
       ]);

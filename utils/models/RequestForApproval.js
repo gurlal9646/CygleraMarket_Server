@@ -24,7 +24,7 @@ const requestForApprovalSchema = new Schema({
     type: String
   },
   sellerId: {
-    type: Number,
+    type: String,
     required: true,
   },
   status: {

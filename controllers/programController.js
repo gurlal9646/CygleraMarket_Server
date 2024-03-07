@@ -7,7 +7,7 @@ const {
   
   const programs = async (request, response) => {
     logger.info(`Register Seller: ${JSON.stringify(request.body)}`);
-    const result = await getrPograms(request.params.programId, request.user);
+    const result = await getPrograms(request.params.programId, request.user);
     response.json(result);
   };
   
