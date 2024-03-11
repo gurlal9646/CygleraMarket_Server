@@ -4,6 +4,10 @@ const { AccessInfo } = require("../utils/models/AccessInfo.js");
 const { Seller } = require("../utils/models/SellerInfo.js");
 const { Buyer } = require("../utils/models/BuyerInfo.js");
 const { comparePasswords } = require("../utils/bcrypt.js");
+const Token = require("../utils/models/Token.js");
+const crypto = require("crypto");
+
+
 const {
   ResponseCode,
   ResponseSubCode,
@@ -94,6 +98,22 @@ const generateToken = async ({ email, password, roleId }) => {
   return result;
 };
 
+const resetLink = async ({ email }) => {
+  const user = await AccessInfo.findOne({ email: email });
+  if (!user)
+      return res.status(400).send("user with given email doesn't exist");
+
+  let token = await Token.findOne({ userId: user._id });
+  if (!token) {
+      token = await new Token({
+          userId: user._id,
+          token: crypto.randomBytes(32).toString("hex"),
+      }).save();
+  }
+
+  const link = `${process.env.BASE_URL}/password-reset/${user._id}/${token.token}`;
+  await sendEmail(user.email, "Password reset", link);
+}
 connect()
   .then((connectedClient) => {
     client = connectedClient;

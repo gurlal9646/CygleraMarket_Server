@@ -52,7 +52,7 @@ router.get("/healthcheck", async (request, response) => {
 
 router.use("/buyer", buyersRouter);
 router.use("/seller", sellerRouter);
-router.use("/login", loginRouter);
+router.use("/user", loginRouter);
 router.use("/product", productRouter);
 router.use("/program", programRouter);
 router.use("/service",serviceRouter);
