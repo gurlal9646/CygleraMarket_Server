@@ -17,7 +17,7 @@ const sendEmail = async (email, subject, text) => {
             from: process.env.USER,
             to: email,
             subject: subject,
-            text: text,
+            html: text,
         });
 
         console.log("email sent sucessfully");
@@ -26,4 +26,4 @@ const sendEmail = async (email, subject, text) => {
     }
 };
 
-module.exports = sendEmail;
+module.exports = {sendEmail};
