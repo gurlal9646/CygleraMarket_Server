@@ -5,57 +5,39 @@ const {
   ResponseCode,
   ResponseMessage,
   ResponseSubCode,
-  Roles
+  Roles,
 } = require("../utils/Enums.js");
 const logger = require("../utils/logger.js");
 const { getSellerId } = require("./sellerService.js");
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 
-
-const getApprovals= async (requestId, user) => {
+const getApprovals = async (requestId, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   try {
     logger.info(`Get approvals in request for approval start ${Date.now()}`);
     let approvals = [];
     // Fetch approval based on the Id
     console.log(requestId);
-    if(requestId){
-       approvals = await RequestForApproval.find({requestId:requestId});
+    if (requestId) {
+      approvals = await RequestForApproval.find({ requestId: requestId });
+    } else if (user.roleId === Roles.BUYER || user.roleId === Roles.ADMIN) {
+      approvals = await RequestForApproval.find(
+        { buyerId: user.userId },
+        "_id type name  description price status createdAt"
+      );
+    } else if (user.roleId === Roles.SELLER) {
+      // Fetch all approvals related to specific seller
+      approvals = await RequestForApproval.find(
+        { sellerId: user.userId },
+        "_id type name  description price status createdAt"
+      );
+    } else if (user.roleId === Roles.ADMIN) {
+      // Fetch all approvals related to specific seller
+      approvals = await RequestForApproval.find(
+        "_id type name  description price status createdAt"
+      );
     }
-    else{
-      if (user.roleId === Roles.BUYER || user.roleId === Roles.ADMIN) {
-        // Fetch all approvals if user type is admin or buyer
-        approvals = await RequestForApproval.aggregate([
-          {
-            $lookup: {
-              from: "Seller", // Name of the Seller collection
-              localField: "sellerId",
-              foreignField: "sellerId", // Common attribute name in the Seller collection
-              as: "seller",
-            },
-          },
-          {
-            $unwind: "$seller", // Unwind the 'seller' array to get a single seller object
-          },
-          {
-            $project: {
-              _id: 1,
-              name: 1,
-              type:1,
-              description: 1,
-              price: 1,
-              "seller.companyName": 1,
-              "seller._id":1
-            },
-          },
-        ]);
-  
-      } else if (user.roleId === Roles.SELLER) {
-        // Fetch all approvals related to specific seller
-        approvals = await RequestForApproval.find({ sellerId: user.userId },'_id type name  description price status createdAt');
-      }
-    }
-   
+
     if (approvals.length === 0) {
       result.message = ResponseMessage.NODATAFOUND;
     } else {
@@ -70,7 +52,6 @@ const getApprovals= async (requestId, user) => {
   }
   return result;
 };
-
 
 const saveRequest = async (request, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
@@ -133,4 +114,4 @@ connect()
     process.exit(1); // Exit the application if the database connection fails
   });
 
-module.exports = {getApprovals, saveRequest };
+module.exports = { getApprovals, saveRequest };
