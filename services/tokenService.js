@@ -1,13 +1,16 @@
 const { connect } = require("../utils/DataBase.js");
+const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+const Joi = require("joi");
 const { AccessInfo } = require("../utils/models/AccessInfo.js");
 const { Seller } = require("../utils/models/SellerInfo.js");
 const { Buyer } = require("../utils/models/BuyerInfo.js");
-const { comparePasswords } = require("../utils/bcrypt.js");
+const {comparePasswords } = require("../utils/bcrypt.js");
+const { encryptPassword } = require("../utils/bcrypt.js");
 const { sendEmail } = require("../utils/sendEmail.js");
 
 const Token = require("../utils/models/Token.js");
-const crypto = require("crypto");
 
 
 const {
@@ -18,6 +21,7 @@ const {
 } = require("../utils/Enums.js");
 const ApiResponse = require("../utils/models/ApiResponse.js");
 const logger = require("../utils/logger.js");
+const { response } = require("express");
 
 const generateToken = async ({ email, password, roleId }) => {
   let accessInfo;
@@ -100,7 +104,7 @@ const generateToken = async ({ email, password, roleId }) => {
   return result;
 };
 
-const resetPassword = async ({ email }) => {
+const resetPasswordLink = async ({ email }) => {
   const result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
 
   try {
@@ -168,6 +172,47 @@ const resetPassword = async ({ email }) => {
   }
 };
 
+const resetPassword = async ({ pass, userId, token }) => {
+  const result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
+  try {
+    const schema = Joi.object({ password: Joi.string().required() });
+    const { error } = schema.validate(pass);
+    if (error) {
+      result.message = error.details[0].message;
+      return result;
+    }
+    
+    console.log(userId);
+    const user = await AccessInfo.findById(userId);
+    if (!user) {
+      result.message = "Invalid link or expired(User Not Found)";
+      return result;
+    }
+    const userToken = await Token.findOne({
+      userId: user._id,
+      token: token,
+    });
+    if (!userToken) {
+      result.message = "Invalid link or expired";
+      return result;
+    }
+    const encryptedPassword = await encryptPassword(pass.password);
+
+    user.password = encryptedPassword; // Assign the hashed password from pass object
+    await user.save();
+    await userToken.deleteOne();
+
+    result.code = ResponseCode.SUCCESS;
+    result.message = "Password reset successfully.";
+    return result;
+  } catch (error) {
+    console.error(`An error occurred in resetPassword: ${error}`);
+    result.message = "An error occurred";
+    return result;
+  }
+};
+
+
 connect()
   .then((connectedClient) => {
     client = connectedClient;
@@ -178,4 +223,4 @@ connect()
     process.exit(1); // Exit the application if the database connection fails
   });
 
-module.exports = { generateToken,resetPassword };
+module.exports = { generateToken,resetPasswordLink,resetPassword };

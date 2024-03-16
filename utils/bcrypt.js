@@ -1,8 +1,11 @@
 const bcrypt = require('bcrypt');
 const saltRounds = 10; // You can adjust the number of salt rounds
 
+
 async function encryptPassword(password) {
   try {
+    console.log(password);
+    console.log("encrypting")
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = await bcrypt.hash(password, salt);
     return hash;
