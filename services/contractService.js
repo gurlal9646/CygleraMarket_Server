@@ -15,7 +15,7 @@ const { v4: uuidv4 } = require('uuid');
 const getContracts = async (contractId, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   try {
-    logger.info(`Get contract in service start ${Date.now()}`);
+    logger.info(`Get contract in service start ${new Date().toISOString()}`);
     let contracts = [];
     // Fetch contract based on the Id
     const contract = await Contract.findById(contractId);
@@ -95,7 +95,7 @@ const saveContract = async (contract, user) => {
 const removeContract = async (contractId, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   try {
-    logger.info(`Remove contract in service start ${Date.now()}`);
+    logger.info(`Remove contract in service start ${new Date().toISOString()}`);
     let deletedContract;
     if (user.roleId === Roles.ADMIN) {
       // For admins, allow deletion of any Contract

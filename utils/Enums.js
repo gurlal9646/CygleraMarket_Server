@@ -16,6 +16,41 @@ class ResponseSubCode{
     static EXCEPTION = 100;
 }
 
+class EmailTemplate{
+    static RESETPASSWORD=`<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Password Reset</title>
+    </head>
+    <body style="font-family: Arial, sans-serif;">
+    
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#f4f4f4">
+            <tr>
+                <td align="center" style="padding: 40px 0;">
+                    <table cellpadding="0" cellspacing="0" border="0" width="600" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                        <tr>
+                            <td style="padding: 40px; text-align: center;">
+                                <h1 style="color: #333333;">Password Reset</h1>
+                                <p style="font-size: 16px; color: #666666; line-height: 1.6;">Dear User,</p>
+                                <p style="font-size: 16px; color: #666666; line-height: 1.6;">You have requested to reset your password. Click the link below to proceed with the password reset:</p>
+                                <p style="font-size: 16px; color: #666666; line-height: 1.6;"><a href="$link" style="background-color: #007bff; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 4px;">Reset Password</a></p>
+                                <p style="font-size: 16px; color: #666666; line-height: 1.6;">If you did not request this password reset, please ignore this email.</p>
+                                <p style="font-size: 16px; color: #666666; line-height: 1.6;">Thank you,<br>Your Company Name</p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    
+    </body>
+    </html>
+    `;;
+}
+
 class ResponseMessage{
 
         static EXISTINGUSERMESSAGE = 'User with this email already exists';
@@ -68,4 +103,4 @@ class ResponseMessage{
 
 }
 
-module.exports = { Roles ,ResponseCode ,ResponseSubCode,ResponseMessage };
+module.exports = { Roles ,ResponseCode ,ResponseSubCode,ResponseMessage,EmailTemplate };

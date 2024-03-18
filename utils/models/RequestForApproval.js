@@ -41,7 +41,7 @@ const requestForApprovalSchema = new Schema({
     type: Date,
     default: null,
   },
-  expiryDate: {
+  endDate: {
     type: Date,
     default: null,
   },

@@ -17,7 +17,7 @@ const { v4: uuidv4 } = require('uuid');
 const registerSeller = async (seller) => {
   const { email } = seller;
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
-  logger.info(`Register Seller in service start ${Date.now()}`);
+  logger.info(`Register Seller in service start ${new Date().toISOString()}`);
   try {
     if (await Seller.findOne({ email :{ $regex: email, $options: 'i' }})) {
       result.message = ResponseMessage.EXISTINGUSERMESSAGE;
@@ -61,7 +61,7 @@ const registerSeller = async (seller) => {
     result.message = "Registration failed";
     result.subcode = ResponseSubCode.EXCEPTION;
   }
-  logger.info(`Register Seller in service end ${Date.now()}`);
+  logger.info(`Register Seller in service end ${new Date().toISOString()}`);
   return result;
 };
 
@@ -78,7 +78,7 @@ connect()
   const getAllSellers = async () => {
     let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
     try {
-      logger.info(`Get Sellers in service start ${Date.now()}`);
+      logger.info(`Get Sellers in service start ${new Date().toISOString()}`);
       // Fetch all buyers from the database
       let sellers = await Seller.find();
   
@@ -94,7 +94,7 @@ connect()
       result.message = "Error fetching sellers";
       result.subcode = ResponseSubCode.EXCEPTION;
     }
-    logger.info(`Get Sellers in service end ${Date.now()}`);
+    logger.info(`Get Sellers in service end ${new Date().toISOString()}`);
     return result;
   };
   

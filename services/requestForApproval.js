@@ -14,7 +14,7 @@ const { v4: uuidv4 } = require("uuid");
 const getApprovals = async (requestId, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   try {
-    logger.info(`Get approvals in request for approval start ${Date.now()}`);
+    logger.info(`Get approvals in request for approval start ${new Date().toISOString()}`);
     let approvals = [];
     // Fetch approval based on the Id
     console.log(requestId);
@@ -55,7 +55,7 @@ const getApprovals = async (requestId, user) => {
 
 const saveRequest = async (request, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
-  logger.info(`Save request for approval in service start ${Date.now()}`);
+  logger.info(`Save request for approval in service start ${new Date().toISOString()}`);
   try {
     const { requestId } = request;
 
@@ -100,7 +100,7 @@ const saveRequest = async (request, user) => {
     result.message = "Unable to add or update product";
     result.subcode = ResponseSubCode.EXCEPTION;
   }
-  logger.info(`Save request for approval in service end ${Date.now()}`);
+  logger.info(`Save request for approval in service end ${new Date().toISOString()}`);
   return result;
 };
 

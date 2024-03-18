@@ -17,7 +17,7 @@ const { v4: uuidv4 } = require('uuid');
 const registerBuyer = async (buyer) => {
   const { email } = buyer;
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
-  logger.info(`Register Buyer in service start ${Date.now()}`);
+  logger.info(`Register Buyer in service start ${new Date().toISOString()}`);
   try {
     if (await Buyer.findOne({ email :{ $regex: email, $options: 'i' }})) {
       result.message = ResponseMessage.EXISTINGUSERMESSAGE;
@@ -68,7 +68,7 @@ const registerBuyer = async (buyer) => {
 const getAllBuyers = async () => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   try {
-    logger.info(`Get Buyers in service start ${Date.now()}`);
+    logger.info(`Get Buyers in service start ${new Date().toISOString()}`);
     // Fetch all buyers from the database
     let buyers = await Buyer.find();
 

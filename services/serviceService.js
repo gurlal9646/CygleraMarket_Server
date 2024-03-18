@@ -15,7 +15,7 @@ const { v4: uuidv4 } = require('uuid');
 const getServices = async (serviceId, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   try {
-    logger.info(`Get services in service start ${Date.now()}`);
+    logger.info(`Get services in service start ${new Date().toISOString()}`);
     let services = [];
     // Fetch service based on the Id
     const service = await Service.findById(serviceId);
@@ -67,7 +67,7 @@ const getServices = async (serviceId, user) => {
 
 const saveService = async (service, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
-  logger.info(`Save service in service start ${Date.now()}`);
+  logger.info(`Save service in service start ${new Date().toISOString()}`);
   try {
     const {  serviceId } = service;
 
@@ -111,14 +111,14 @@ const saveService = async (service, user) => {
     result.message = "Unable to add or update service";
     result.subcode = ResponseSubCode.EXCEPTION;
   }
-  logger.info(`Save service in service end ${Date.now()}`);
+  logger.info(`Save service in service end ${new Date().toISOString()}`);
   return result;
 };
 
 const removeService = async (serviceId, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   try {
-    logger.info(`Remove service in service start ${Date.now()}`);
+    logger.info(`Remove service in service start ${new Date().toISOString()}`);
     let deletedService;
     if (user.roleId === Roles.ADMIN) {
       // For admins, allow deletion of any service
@@ -145,7 +145,7 @@ const removeService = async (serviceId, user) => {
     result.message = "Unable to delete service";
     result.subcode = ResponseSubCode.EXCEPTION;
   }
-  logger.info(`Remove  service in service end ${Date.now()}`);
+  logger.info(`Remove  service in service end ${new Date().toISOString()}`);
   return result;
 };
 

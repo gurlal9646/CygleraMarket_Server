@@ -14,7 +14,7 @@ const { v4: uuidv4 } = require('uuid');
 const getProducts = async (productId, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   try {
-    logger.info(`Get products in service start ${Date.now()}`);
+    logger.info(`Get products in service start ${new Date().toISOString()}`);
     let products = [];
     // Fetch product based on the Id
     const product = await Product.findById(productId);
@@ -70,7 +70,7 @@ const getProducts = async (productId, user) => {
 
 const saveProduct = async (product, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
-  logger.info(`Save product in service start ${Date.now()}`);
+  logger.info(`Save product in service start ${new Date().toISOString()}`);
   try {
     const { productId } = product;
 
@@ -120,7 +120,7 @@ const saveProduct = async (product, user) => {
 const removeProduct = async (productId, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   try {
-    logger.info(`Remove product in service start ${Date.now()}`);
+    logger.info(`Remove product in service start ${new Date().toISOString()}`);
     let deletedProduct;
     if (user.roleId === Roles.ADMIN) {
       // For admins, allow deletion of any product

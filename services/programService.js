@@ -74,7 +74,7 @@ const getPrograms = async (programId, user) => {
 
 const saveProgram = async (program, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
-  logger.info(`Save program in service start ${Date.now()}`);
+  logger.info(`Save program in service start ${new Date().toISOString()}`);
   try {
     const { programId } = program;
 
@@ -117,14 +117,14 @@ const saveProgram = async (program, user) => {
     result.message = "Unable to add or update product";
     result.subcode = ResponseSubCode.EXCEPTION;
   }
-  logger.info(`Save program in service end ${Date.now()}`);
+  logger.info(`Save program in service end ${new Date().toISOString()}`);
   return result;
 };
 
 const removeProgram = async (programId, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   try {
-    logger.info(`Remove program in service start ${Date.now()}`);
+    logger.info(`Remove program in service start ${new Date().toISOString()}`);
     let deletedProgram;
     if (user.roleId === Roles.ADMIN) {
       // For admins, allow deletion of any Program
@@ -151,7 +151,7 @@ const removeProgram = async (programId, user) => {
     result.message = "Unable to delete program";
     result.subcode = ResponseSubCode.EXCEPTION;
   }
-  logger.info(`Remove program in service end ${Date.now()}`);
+  logger.info(`Remove program in service end ${new Date().toISOString()}`);
   return result;
 };
 
