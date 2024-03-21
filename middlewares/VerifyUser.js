@@ -9,7 +9,7 @@ const secret = process.env.SECRET_KEY;
 const verifyToken = (req, res, next) => {
   // Get the token from the Authorization header
 
-  if (req.url.includes('/token') || req.url.includes('/register') || req.url.includes('/healthcheck')  || req.url.includes('/password-reset')) {
+  if (req.url.includes('/token') || req.url.includes('/register') || req.url.includes('/healthcheck')  || req.url.includes('/password-reset')|| req.url.includes('/login')) {
     // If it's the login path, skip token verification and proceed to the next middleware
     return next();
   }

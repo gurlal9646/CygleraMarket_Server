@@ -58,12 +58,15 @@ const generateToken = async ({ email, password, roleId }) => {
       }
       if (await comparePasswords(password, accessInfo.password)) {
         let userInfo;
+        let userId;
         switch (accessInfo.roleId) {
           case Roles.SELLER:
             userInfo = await Seller.findOne({ sellerId: accessInfo.sellerId });
+            userId =userInfo.sellerId;
             break;
           case Roles.BUYER:
             userInfo = await Buyer.findOne({ buyerId: accessInfo.buyerId });
+            userId =userInfo.buyerId;
             break;
           // Add other role cases if needed
           default:
@@ -72,10 +75,7 @@ const generateToken = async ({ email, password, roleId }) => {
 
         const token = jwt.sign(
           {
-            userId:
-              accessInfo.sellerId 
-                ? accessInfo.sellerId
-                : accessInfo.buyerId,
+            userId:userId,
             email: accessInfo.email,
             roleId: accessInfo.roleId,
           },
