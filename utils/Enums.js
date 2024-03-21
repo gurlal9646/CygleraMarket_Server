@@ -38,7 +38,7 @@ class EmailTemplate{
                                 <p style="font-size: 16px; color: #666666; line-height: 1.6;">You have requested to reset your password. Click the link below to proceed with the password reset:</p>
                                 <p style="font-size: 16px; color: #666666; line-height: 1.6;"><a href="$link" style="background-color: #007bff; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 4px;">Reset Password</a></p>
                                 <p style="font-size: 16px; color: #666666; line-height: 1.6;">If you did not request this password reset, please ignore this email.</p>
-                                <p style="font-size: 16px; color: #666666; line-height: 1.6;">Thank you,<br>Your Company Name</p>
+                                <p style="font-size: 16px; color: #666666; line-height: 1.6;">Thank you,<br>Cyglera Market</p>
                             </td>
                         </tr>
                     </table>
