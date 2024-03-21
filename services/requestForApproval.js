@@ -23,19 +23,19 @@ const getApprovals = async (requestId, user) => {
     } else if (user.roleId === Roles.BUYER || user.roleId === Roles.ADMIN) {
       approvals = await RequestForApproval.find(
         { buyerId: user.userId },
-        "_id type name  description price status createdAt"
-      );
+        "_id type name description price status quantity startDate endDate createdAt"
+    ).sort({ createdAt: -1 });
     } else if (user.roleId === Roles.SELLER) {
       // Fetch all approvals related to specific seller
       approvals = await RequestForApproval.find(
         { sellerId: user.userId },
-        "_id type name  description price status createdAt"
-      );
+        "_id type name  description price status quantity startDate endDate createdAt"
+      ).sort({ createdAt: -1 });
     } else if (user.roleId === Roles.ADMIN) {
       // Fetch all approvals related to specific seller
       approvals = await RequestForApproval.find(
-        "_id type name  description price status createdAt"
-      );
+        "_id type name  description price status quantity startDate endDate createdAt"
+      ).sort({ createdAt: -1 });
     }
 
     if (approvals.length === 0) {
