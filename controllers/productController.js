@@ -2,6 +2,7 @@ const {
   getProducts,
   saveProduct,
   removeProduct,
+  getLatestProducts,
 } = require("../services/productService.js");
 const logger = require("../utils/logger.js");
 
@@ -22,5 +23,13 @@ const deleteProduct = async (request, response) => {
   const result = await removeProduct(request.params.productId, request.user);
   response.json(result);
 };
+const latestProducts = async (request, response) => {
+  logger.info(`Get Latest Products: ${JSON.stringify(request.body)}`);
+  const result = await getLatestProducts(request.user);
+  response.json(result);
+};
 
-module.exports = { addProduct, products, deleteProduct };
+module.exports = { addProduct, products, deleteProduct,latestProducts };
+
+
+

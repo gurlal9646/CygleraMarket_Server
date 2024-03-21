@@ -117,6 +117,24 @@ const saveProduct = async (product, user) => {
   return result;
 };
 
+
+
+const getLatestProducts = async (req, res) => {
+    try {
+      // Fetch 10 products sorted by date in descending order
+      const products = await Product.find().sort({ date: -1 }).limit(10);
+     // console.log(products);
+      return products;
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  } 
+;
+
+
+
+
 const removeProduct = async (productId, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   try {
@@ -161,4 +179,5 @@ connect()
     process.exit(1); // Exit the application if the database connection fails
   });
 
-module.exports = { getProducts, saveProduct, removeProduct };
+module.exports = { getProducts, saveProduct, removeProduct, getLatestProducts };
+
