@@ -6,31 +6,45 @@ const requestConversationSchema = new Schema({
     type: String,
     required: true,
   },
-  conversationId:{
-    type: String,
+  conversationId: {
+    type: Schema.Types.ObjectId,
     required: true,
+    unique: true,
   },
   buyerId: {
     type: String,
-    required: true,
+    default :0,
+    
   },
   sellerId: {
     type: String,
-    required: true,
+    default :0,
   },
-  message:{
+  message: {
     type: String,
     required: true,
+    minlength: 1,
+    maxlength: 1000 // Example: limit message to 1000 characters
   },
-  timeStamp:{
+  createdAt: {
     type: Date,
-        default: Date.now,
-        required: true
+    default: Date.now,
+    required: true
   }
 });
 
+// Ensure that either buyerId or sellerId is present
+requestConversationSchema.path('buyerId').validate(function(value) {
+  return this.buyerId || this.sellerId;
+}, 'Either buyerId or sellerId must be present.');
+
+// Ensure that only one of buyerId or sellerId is present
+requestConversationSchema.path('sellerId').validate(function(value) {
+  return !this.buyerId || this.sellerId;
+}, 'Either buyerId or sellerId must be present, not both.');
+
 const RequestConversation = mongoose.model(
-  "requestForApproval",
+  "RequestConversation",
   requestConversationSchema,
   "RequestConversation"
 );
