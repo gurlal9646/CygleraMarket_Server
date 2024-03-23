@@ -15,7 +15,7 @@ const verifyToken = (req, res, next) => {
   }
 
   let token = req.headers["x-access-token"] || req.headers["authorization"];
- logger.info(`Verifying JWT: ${req.url} ${token}`);
+ logger.info(`Token verification started`);
 
   // If a token is found, remove 'Bearer ' if it's present
 
@@ -26,9 +26,10 @@ const verifyToken = (req, res, next) => {
   // If there is no token, return an error
 
   if (!token) {
+    logger.error(`Token not available for verification!`);
+
     return res.status(403).json({
       success: false,
-
       message: "A token is required for authentication",
     });
   }
@@ -37,13 +38,15 @@ const verifyToken = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, secret);
-    req.user = decoded; // Add the decoded token to the request object
+    req.user = decoded; 
   } catch (err) {
+    logger.error(`Token verification failed`);
     return res.status(401).json({
       success: false,
 
       message: "Invalid token",
     });
+
   }
 
   return next(); // Proceed to the next middleware or route handler

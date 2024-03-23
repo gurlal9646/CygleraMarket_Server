@@ -1,17 +1,16 @@
 const { connect } = require("../utils/DataBase.js");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const Joi = require("joi");
 const { AccessInfo } = require("../utils/models/AccessInfo.js");
 const { Seller } = require("../utils/models/SellerInfo.js");
 const { Buyer } = require("../utils/models/BuyerInfo.js");
-const {comparePasswords } = require("../utils/bcrypt.js");
+const { comparePasswords } = require("../utils/bcrypt.js");
 const { encryptPassword } = require("../utils/bcrypt.js");
 const { sendEmail } = require("../utils/sendEmail.js");
 
 const Token = require("../utils/models/Token.js");
-
 
 const {
   ResponseCode,
@@ -19,7 +18,7 @@ const {
   ResponseMessage,
   Roles,
   Email,
-  EmailTemplate
+  EmailTemplate,
 } = require("../utils/Enums.js");
 const ApiResponse = require("../utils/models/ApiResponse.js");
 const logger = require("../utils/logger.js");
@@ -30,7 +29,9 @@ const generateToken = async ({ email, password, roleId }) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
 
   try {
-    logger.info(`generateToken in service: ${(email, password, roleId)}`);
+    logger.info(
+      `GenerateToken in service: ${JSON.stringify({ email, password, roleId })}`
+    );
 
     if (
       !(await AccessInfo.findOne({ email: { $regex: email, $options: "i" } }))
@@ -62,20 +63,22 @@ const generateToken = async ({ email, password, roleId }) => {
         switch (accessInfo.roleId) {
           case Roles.SELLER:
             userInfo = await Seller.findOne({ sellerId: accessInfo.sellerId });
-            userId =userInfo.sellerId;
+            userId = userInfo.sellerId;
             break;
           case Roles.BUYER:
             userInfo = await Buyer.findOne({ buyerId: accessInfo.buyerId });
-            userId =userInfo.buyerId;
+            userId = userInfo.buyerId;
             break;
           // Add other role cases if needed
           default:
             break;
         }
 
+        console.log(userId);
+
         const token = jwt.sign(
           {
-            userId:userId,
+            userId: userId,
             email: accessInfo.email,
             roleId: accessInfo.roleId,
           },
@@ -90,7 +93,7 @@ const generateToken = async ({ email, password, roleId }) => {
           firstName: userInfo.firstName,
           lastName: userInfo.lastName,
           email: accessInfo.email,
-          uniqueId: userInfo._id,
+          uniqueId: userId
         };
         return result;
       } else {
@@ -129,7 +132,7 @@ const resetPasswordLink = async ({ email }) => {
 
     const link = `${process.env.BASE_URL}/password-reset/${user._id}/${token.token}`;
 
-    const emailContent = EmailTemplate.RESETPASSWORD.replace('$link', link);
+    const emailContent = EmailTemplate.RESETPASSWORD.replace("$link", link);
     await sendEmail(user.email, "Password reset", emailContent);
 
     result.code = ResponseCode.SUCCESS;
@@ -152,7 +155,7 @@ const resetPassword = async ({ pass, userId, token }) => {
       result.message = error.details[0].message;
       return result;
     }
-    
+
     console.log(userId);
     const user = await AccessInfo.findById(userId);
     if (!user) {
@@ -183,7 +186,6 @@ const resetPassword = async ({ pass, userId, token }) => {
   }
 };
 
-
 connect()
   .then((connectedClient) => {
     client = connectedClient;
@@ -194,4 +196,4 @@ connect()
     process.exit(1); // Exit the application if the database connection fails
   });
 
-module.exports = { generateToken,resetPasswordLink,resetPassword };
+module.exports = { generateToken, resetPasswordLink, resetPassword };

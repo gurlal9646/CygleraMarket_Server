@@ -1,6 +1,6 @@
 const { requestWhitelist } = require("express-winston");
 const {
-    saveRequest,getApprovals,getConversation,updateRequestStatus
+    saveRequest,getApprovals,getConversation,updateRequestStatus, addConversation
   } = require("../services/requestForApproval.js");
   const logger = require("../utils/logger.js");
 
@@ -16,6 +16,12 @@ const {
     const result = await saveRequest(request.body, request.user);
     response.json(result);
   };
+  const  saveConversation = async function (request, response) {
+    logger.info(`Save Conversation: ${JSON.stringify(request.body)}`);
+    const result = await addConversation(request.body);
+    response.json(result);
+  };
+
   const  getConvRequest = async function (request, response) {
     const requestId = request.params.requestId;
     console.log(requestId);
@@ -23,7 +29,6 @@ const {
     const result = await getConversation(requestId);
     response.json(result);
   };
-
   const updateRequest = async function (request, response) {
     logger.info(`Update Request Status RequestId: ${request.params.requestId}`);
     const result = await updateRequestStatus(request.params.requestId,request.body);
@@ -31,5 +36,5 @@ const {
   };
   
   
-  module.exports = { addRequest,fetchApprovals ,getConvRequest,updateRequest};
+  module.exports = { addRequest,fetchApprovals ,saveConversation,getConvRequest,updateRequest};
   

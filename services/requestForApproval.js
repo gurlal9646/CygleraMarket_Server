@@ -1,6 +1,8 @@
 const { connect } = require("../utils/DataBase.js");
 const { RequestForApproval } = require("../utils/models/RequestForApproval.js");
-const { RequestConversation } = require("../utils/models/RequestConversation.js");
+const {
+  RequestConversation,
+} = require("../utils/models/RequestConversation.js");
 
 const ApiResponse = require("../utils/models/ApiResponse.js");
 const {
@@ -16,30 +18,63 @@ const { v4: uuidv4 } = require("uuid");
 const getApprovals = async (requestId, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   try {
-    logger.info(`Get approvals in request for approval start ${new Date().toISOString()}`);
+    logger.info(
+      `Get approvals in request for approval start ${new Date().toISOString()}`
+    );
     let approvals = [];
-    // Fetch approval based on the Id
-    console.log(requestId);
     if (requestId) {
       approvals = await RequestForApproval.find({ requestId: requestId });
-    } else if (user.roleId === Roles.BUYER || user.roleId === Roles.ADMIN) {
+    } else if (user.roleId === Roles.BUYER) {
       approvals = await RequestForApproval.find(
         { buyerId: user.userId },
-        "_id type name description price status quantity startDate endDate createdAt"
-    ).sort({ createdAt: -1 });
+        {
+          _id: 0,
+          requestId: 1,
+          type: 1,
+          name: 1,
+          description: 1,
+          price: 1,
+          status: 1,
+          quantity: 1,
+          startDate: 1,
+          endDate: 1,
+          createdAt: 1,
+        }
+      ).sort({ createdAt: -1 });
     } else if (user.roleId === Roles.SELLER) {
       // Fetch all approvals related to specific seller
       approvals = await RequestForApproval.find(
         { sellerId: user.userId },
-        "_id type name  description price status quantity startDate endDate createdAt"
+        {
+          _id: 0,
+          requestId: 1,
+          type: 1,
+          name: 1,
+          description: 1,
+          price: 1,
+          status: 1,
+          quantity: 1,
+          startDate: 1,
+          endDate: 1,
+          createdAt: 1,
+        }
       ).sort({ createdAt: -1 });
     } else if (user.roleId === Roles.ADMIN) {
       // Fetch all approvals related to specific seller
-      approvals = await RequestForApproval.find(
-        "_id type name  description price status quantity startDate endDate createdAt"
-      ).sort({ createdAt: -1 });
+      approvals = await RequestForApproval.find({
+        _id: 0,
+        requestId: 1,
+        type: 1,
+        name: 1,
+        description: 1,
+        price: 1,
+        status: 1,
+        quantity: 1,
+        startDate: 1,
+        endDate: 1,
+        createdAt: 1,
+      }).sort({ createdAt: -1 });
     }
-
     if (approvals.length === 0) {
       result.message = ResponseMessage.NODATAFOUND;
     } else {
@@ -57,7 +92,9 @@ const getApprovals = async (requestId, user) => {
 
 const saveRequest = async (request, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
-  logger.info(`Save request for approval in service start ${new Date().toISOString()}`);
+  logger.info(
+    `Save request for approval in service start ${new Date().toISOString()}`
+  );
   try {
     const { requestId } = request;
 
@@ -82,15 +119,13 @@ const saveRequest = async (request, user) => {
         result.message = ResponseMessage.RFANOTUPDATED;
       }
     } else {
-      // Product does not exist, create a new one
+      // Purchase Request does not exist, create a new one
       request.requestId = uuidv4();
       request.buyerId = user.userId;
       request.sellerId = request.sellerUniqueId;
 
-      // Create the new product
+      // Create the purchase request
       let dbResponse = await RequestForApproval.create(request);
-
-      console.log(dbResponse);
       if (dbResponse._id) {
         result.code = ResponseCode.SUCCESS;
         result.message = ResponseMessage.RFAADDED;
@@ -102,15 +137,18 @@ const saveRequest = async (request, user) => {
     result.message = "Unable to add or update product";
     result.subcode = ResponseSubCode.EXCEPTION;
   }
-  logger.info(`Save request for approval in service end ${new Date().toISOString()}`);
+  logger.info(
+    `Save request for approval in service end ${new Date().toISOString()}`
+  );
   return result;
 };
 
 const updateRequestStatus = async (requestId, request) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
-  logger.info(`Update request status for purchase in service start ${new Date().toISOString()}`);
+  logger.info(
+    `Update request status for purchase in service start ${new Date().toISOString()}`
+  );
   try {
-
     // Check if the request with the given requestId exists
     const existingRequest = await RequestForApproval.findOne({ requestId });
 
@@ -137,27 +175,53 @@ const updateRequestStatus = async (requestId, request) => {
     result.message = "Unable to add or update product";
     result.subcode = ResponseSubCode.EXCEPTION;
   }
-  logger.info(`Update request status for purchase in service end ${new Date().toISOString()}`);
+  logger.info(
+    `Update request status for purchase in service end ${new Date().toISOString()}`
+  );
   return result;
 };
 
+const addConversation = async (request) => {
+  let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
+  try {
+    logger.info(
+      `Add conversation in service start ${new Date().toISOString()}`
+    );
+    request.conversationId = uuidv4();
+
+    let dbResponse = await RequestConversation.create(
+      request
+    );
+    if (dbResponse._id) {
+      result.code = ResponseCode.SUCCESS;
+      result.data = dbResponse;
+    }
+  } catch (error) {
+    // Handle errors if any occur during the database operation
+    logger.error(`Error adding conversation: ${error}`);
+    result.message = "Unable to add conversation";
+    result.subcode = ResponseSubCode.EXCEPTION;
+  }
+  logger.info(`Add conversation in service end ${new Date().toISOString()}`);
+  return result;
+};
 
 const getConversation = async (requestId) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   try {
     logger.info(`Get all conversation ${new Date().toISOString()}`);
     let conversation = [];
-    // Fetch approval based on the Id
-    console.log(requestId);
+    // Get conversation based on the requestId
     if (requestId) {
-      conversation = await RequestConversation.find({ requestId: requestId }).sort({ createdAt: -1 });
-    } 
-      
+      conversation = await RequestConversation.find({
+        requestId: requestId,
+      }).sort({ createdAt: -1 });
+    }
+
     if (conversation.length === 0) {
       result.message = ResponseMessage.NODATAFOUND;
     } else {
       result.code = ResponseCode.SUCCESS;
-      result,message="conversation found"
       result.data = conversation;
     }
   } catch (error) {
@@ -169,8 +233,6 @@ const getConversation = async (requestId) => {
   return result;
 };
 
-
-
 connect()
   .then((connectedClient) => {
     client = connectedClient;
@@ -181,4 +243,10 @@ connect()
     process.exit(1); // Exit the application if the database connection fails
   });
 
-module.exports = { getApprovals, saveRequest,getConversation,updateRequestStatus };
+module.exports = {
+  getApprovals,
+  saveRequest,
+  addConversation,
+  getConversation,
+  updateRequestStatus,
+};

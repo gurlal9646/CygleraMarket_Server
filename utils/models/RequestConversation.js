@@ -7,7 +7,7 @@ const requestConversationSchema = new Schema({
     required: true,
   },
   conversationId: {
-    type: Schema.Types.ObjectId,
+    type: String,
     required: true,
     unique: true,
   },
