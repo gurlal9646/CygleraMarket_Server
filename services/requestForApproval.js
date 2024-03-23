@@ -1,5 +1,7 @@
 const { connect } = require("../utils/DataBase.js");
 const { RequestForApproval } = require("../utils/models/RequestForApproval.js");
+const { RequestConversation } = require("../utils/models/RequestConversation.js");
+
 const ApiResponse = require("../utils/models/ApiResponse.js");
 const {
   ResponseCode,
@@ -139,6 +141,36 @@ const updateRequestStatus = async (requestId, request) => {
   return result;
 };
 
+
+const getConversation = async (requestId) => {
+  let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
+  try {
+    logger.info(`Get all conversation ${new Date().toISOString()}`);
+    let conversation = [];
+    // Fetch approval based on the Id
+    console.log(requestId);
+    if (requestId) {
+      conversation = await RequestConversation.find({ requestId: requestId }).sort({ createdAt: -1 });
+    } 
+      
+    if (conversation.length === 0) {
+      result.message = ResponseMessage.NODATAFOUND;
+    } else {
+      result.code = ResponseCode.SUCCESS;
+      result,message="conversation found"
+      result.data = conversation;
+    }
+  } catch (error) {
+    // Handle errors if any occur during the database operation
+    logger.error(`Error fetching conversation: ${error}`);
+    result.message = "Unable to fetch conversation";
+    result.subcode = ResponseSubCode.EXCEPTION;
+  }
+  return result;
+};
+
+
+
 connect()
   .then((connectedClient) => {
     client = connectedClient;
@@ -149,4 +181,4 @@ connect()
     process.exit(1); // Exit the application if the database connection fails
   });
 
-module.exports = { getApprovals, saveRequest,updateRequestStatus };
+module.exports = { getApprovals, saveRequest,getConversation,updateRequestStatus };
