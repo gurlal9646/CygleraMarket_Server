@@ -13,12 +13,12 @@ const requestConversationSchema = new Schema({
   },
   buyerId: {
     type: String,
-    default :0,
+    default :'',
     
   },
   sellerId: {
     type: String,
-    default :0,
+    default :'',
   },
   message: {
     type: String,
