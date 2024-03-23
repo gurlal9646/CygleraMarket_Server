@@ -104,6 +104,41 @@ const saveRequest = async (request, user) => {
   return result;
 };
 
+const updateRequestStatus = async (requestId, request) => {
+  let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
+  logger.info(`Update request status for purchase in service start ${new Date().toISOString()}`);
+  try {
+
+    // Check if the request with the given requestId exists
+    const existingRequest = await RequestForApproval.findOne({ requestId });
+
+    if (existingRequest) {
+      // Update the existing request with the fields provided in the request body
+      const updatedRequest = await RequestForApproval.findOneAndUpdate(
+        { requestId },
+        { $set: request },
+        { new: true }
+      );
+
+      if (updatedRequest) {
+        // Request updated successfully
+        result.code = ResponseCode.SUCCESS;
+        result.message = ResponseMessage.RFAUPDATED;
+        result.data = updatedRequest;
+      } else {
+        // Handle update failure
+        result.message = ResponseMessage.RFANOTUPDATED;
+      }
+    }
+  } catch (error) {
+    logger.error(`Error during updating request for purchase: ${error}`);
+    result.message = "Unable to add or update product";
+    result.subcode = ResponseSubCode.EXCEPTION;
+  }
+  logger.info(`Update request status for purchase in service end ${new Date().toISOString()}`);
+  return result;
+};
+
 connect()
   .then((connectedClient) => {
     client = connectedClient;
@@ -114,4 +149,4 @@ connect()
     process.exit(1); // Exit the application if the database connection fails
   });
 
-module.exports = { getApprovals, saveRequest };
+module.exports = { getApprovals, saveRequest,updateRequestStatus };

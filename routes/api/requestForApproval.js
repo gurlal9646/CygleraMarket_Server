@@ -8,5 +8,8 @@ router.get("/getApprovals", rfaController.fetchApprovals);
 
 router.post("/addRequest", rfaController.addRequest);
 
+router.put("/updateRequest/:requestId", rfaController.updateRequest);
+
+
 
 module.exports = router;
