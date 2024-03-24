@@ -40,7 +40,7 @@ requestConversationSchema.path('buyerId').validate(function(value) {
 
 // Ensure that only one of buyerId or sellerId is present
 requestConversationSchema.path('sellerId').validate(function(value) {
-  return !this.buyerId || this.sellerId;
+  return this.buyerId || this.sellerId;
 }, 'Either buyerId or sellerId must be present, not both.');
 
 const RequestConversation = mongoose.model(
