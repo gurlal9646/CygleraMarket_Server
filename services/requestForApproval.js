@@ -215,7 +215,7 @@ const getConversation = async (requestId) => {
     if (requestId) {
       conversation = await RequestConversation.find({
         requestId: requestId,
-      }).sort({ createdAt: -1 });
+      }).sort({ createdAt: 1 });
     }
 
     if (conversation.length === 0) {
