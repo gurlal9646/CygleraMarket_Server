@@ -8,9 +8,7 @@ const {
   ResponseSubCode,
 } = require("../utils/Enums.js");
 const logger = require("../utils/logger.js");
-const { v4: uuidv4 } = require('uuid');
-
-
+const { v4: uuidv4 } = require("uuid");
 
 const getContracts = async (contractId, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
@@ -21,12 +19,16 @@ const getContracts = async (contractId, user) => {
     const contract = await Contract.findById(contractId);
     if (contract) {
       contracts.push(contract);
-    } else if (user.roleId === Roles.BUYER || user.roleId === Roles.ADMIN) {
-      // Fetch all Contracts if user type is admin or buyer
-       contracts = await Contract.find();
+    } else if (user.roleId === Roles.BUYER) {
+      // Fetch all Contracts related to specific nuyer
+      contracts = await Contract.find({ buyerId: user.userId });
     } else if (user.roleId === Roles.SELLER) {
       // Fetch all Contracts related to specific seller
-     contracts = await Contract.find({ sellerId: user.userId });
+      contracts = await Contract.find({ sellerId: user.userId });
+    }
+    if (user.roleId === Roles.ADMIN) {
+      // Fetch all Contracts if user type is admin
+      contracts = await Contract.find();
     }
     if (contracts.length === 0) {
       result.message = ResponseMessage.NODATAFOUND;
@@ -43,7 +45,7 @@ const getContracts = async (contractId, user) => {
   return result;
 };
 
-const saveContract = async (contract, user) => {
+const saveContract = async (contract) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   logger.info(`Save contract in service start ${Date.now()}`);
   try {
@@ -72,11 +74,8 @@ const saveContract = async (contract, user) => {
     } else {
       // Contract does not exist, create a new one
       contract.contractId = uuidv4();
-      contract.sellerId = user.userId;
-
       // Create the new Contract
       let dbResponse = await Contract.create(contract);
-
       if (dbResponse._id) {
         result.code = ResponseCode.SUCCESS;
         result.message = ResponseMessage.CONTRACTADDED;

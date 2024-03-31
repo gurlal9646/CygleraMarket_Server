@@ -13,7 +13,7 @@ const {
   
   const addContract = async function (request, response) {
     logger.info(`Add Contract: ${JSON.stringify(request.body)}`);
-    const result = await saveContract(request.body, request.user);
+    const result = await saveContract(request.body);
     response.json(result);
   };
   

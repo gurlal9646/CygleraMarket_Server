@@ -31,8 +31,8 @@ const contractSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ["pending", "approved", "rejected"],
-    default: "pending",
+    enum: ["Approved by seller", "Approved by buyer", "Payment Pending","Payment Completed"],
+    default: "Approved by seller",
     required: true,
   },
   startDate: {

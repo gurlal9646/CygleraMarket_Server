@@ -124,8 +124,6 @@ const saveRequest = async (request, user) => {
       // Purchase Request does not exist, create a new one
       request.requestId = uuidv4();
       request.buyerId = user.userId;
-      request.sellerId = request.sellerUniqueId;
-
       // Create the purchase request
       let dbResponse = await RequestForApproval.create(request);
       if (dbResponse._id) {
@@ -164,9 +162,7 @@ const updateRequestStatus = async (requestId, request) => {
 
       if (updatedRequest) {
         // Request updated successfully
- 
-        console.log(updatedRequest);
-        if (updatedRequest.status === "approved") {
+         if (updatedRequest.status === "approved") {
           const contract = {
            type: updatedRequest.type,
            itemId:updatedRequest.itemId,
