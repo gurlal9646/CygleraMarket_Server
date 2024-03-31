@@ -12,16 +12,13 @@ const requestForApprovalSchema = new Schema({
     default: 1,
     required: true,
   },
-  itemUniqueId: {
+  itemId: {
     type: String,
     required: true,
   },
   buyerId: {
     type: String,
     required: true,
-  },
-  sellerUniqueId: {
-    type: String
   },
   sellerId: {
     type: String,

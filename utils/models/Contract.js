@@ -7,11 +7,13 @@ const contractSchema = new Schema({
     required: true,
   },
   type: {
-    type: String,
+    type: Number,
+    enum: [1, 2, 3],
+    default: 1,
     required: true,
   },
   itemId: {
-    type: Number,
+    type: String,
     required: true,
   },
   sellerId: {
@@ -29,6 +31,8 @@ const contractSchema = new Schema({
   },
   status: {
     type: String,
+    enum: ["pending", "approved", "rejected"],
+    default: "pending",
     required: true,
   },
   startDate: {

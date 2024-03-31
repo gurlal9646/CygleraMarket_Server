@@ -8,8 +8,7 @@ const {
   ResponseSubCode,
 } = require("../utils/Enums.js");
 const logger = require("../utils/logger.js");
-const { v4: uuidv4 } = require('uuid');
-
+const { v4: uuidv4 } = require("uuid");
 
 const getProducts = async (productId, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
@@ -42,16 +41,18 @@ const getProducts = async (productId, user) => {
             price: 1,
             category: 1,
             manufacturer: 1,
-            stockQuantity:1,
+            stockQuantity: 1,
             "seller.companyName": 1,
-            "seller.sellerId":1
+            "seller.sellerId": 1,
           },
         },
       ]);
-
     } else if (user.roleId === Roles.SELLER) {
       // Fetch all products related to specific seller
-      products = await Product.find({ sellerId: user.userId },'_id name  description price category manufacturer expiryDate createdAt');
+      products = await Product.find(
+        { sellerId: user.userId },
+        "_id name  description price category manufacturer expiryDate createdAt"
+      );
     }
     if (products.length === 0) {
       result.message = ResponseMessage.NODATAFOUND;
@@ -117,24 +118,21 @@ const saveProduct = async (product, user) => {
   return result;
 };
 
-
-
 const getLatestProducts = async (req, res) => {
-    try {
-      // Fetch 10 products sorted by date in descending order
-      const products = await Product.find().sort({ date: -1 }).limit(10);
-     // console.log(products);
-      return products;
-    } catch (error) {
-      console.error("Error fetching products:", error);
-      res.status(500).json({ error: "Internal server error" });
+  let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
+  try {
+    // Fetch 10 products sorted by date in descending order
+    const products = await Product.find().sort({ date: -1 }).limit(10);
+    if (products.length > 0) {
+      result.code = ResponseCode.SUCCESS;
+      result.data = products;
     }
-  } 
-;
-
-
-
-
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+  return result;
+};
 const removeProduct = async (productId, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   try {
@@ -180,4 +178,3 @@ connect()
   });
 
 module.exports = { getProducts, saveProduct, removeProduct, getLatestProducts };
-

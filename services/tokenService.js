@@ -1,5 +1,4 @@
 const { connect } = require("../utils/DataBase.js");
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const Joi = require("joi");
@@ -113,7 +112,6 @@ const resetPasswordLink = async ({ email }) => {
   const result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
 
   try {
-    console.log(email);
     const user = await AccessInfo.findOne({ email: email });
     if (!user) {
       result.subcode = ResponseSubCode.USERNOTEXISTS;
@@ -128,7 +126,6 @@ const resetPasswordLink = async ({ email }) => {
         token: crypto.randomBytes(32).toString("hex"),
       }).save();
     }
-    console.log(token.token);
 S
     const link = `${process.env.REMOTE}/user/password-reset/${user._id}/${token.token}`;
 

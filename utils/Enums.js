@@ -78,8 +78,8 @@ class ResponseMessage{
         static SERVICENOTFOUND = 'Service not found';
         static SERVICENOTDELETED = 'Service not deleted';
 
-        static RFAADDED = 'Request for approval  has been raised. Please wait until admin approves your request';
-        static RFAUPDATED = 'Request for approval  has been updated. Please wait for admin response';
+        static RFAADDED = 'Request for purchase  has been raised. Please wait until admin approves your request';
+        static RFAUPDATED = 'Request for purchase  has been updated. Please wait for admin response';
         static RFANOTUPDATED = 'Unable to update request for approval ';
 
         static PROGRAMADDED = 'Program added';
@@ -97,6 +97,9 @@ class ResponseMessage{
         static CONTRACTDELETED = 'Contract deleted';
         static CONTRACTNOTFOUND = 'Contract not found';
         static CONTRACTNOTDELETED = 'Contract not deleted';
+
+        static REQUESTSTATUSUPDATED='Purchase request has been updated.';
+        static REQUESTSTATUSNOTUPDATED='Purchase request not updated.';
 
 
 

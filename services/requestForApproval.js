@@ -15,6 +15,8 @@ const logger = require("../utils/logger.js");
 const { getSellerId } = require("./sellerService.js");
 const { v4: uuidv4 } = require("uuid");
 
+const { saveContract } = require("../services/contractService.js");
+
 const getApprovals = async (requestId, user) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   try {
@@ -162,12 +164,26 @@ const updateRequestStatus = async (requestId, request) => {
 
       if (updatedRequest) {
         // Request updated successfully
+ 
+        console.log(updatedRequest);
+        if (updatedRequest.status === "approved") {
+          const contract = {
+           type: updatedRequest.type,
+           itemId:updatedRequest.itemId,
+           sellerId:updatedRequest.sellerId,
+           buyerId:updatedRequest.buyerId,
+           price:updatedRequest.price
+
+          };
+          saveContract(contract, request.user);
+        }
+
         result.code = ResponseCode.SUCCESS;
-        result.message = ResponseMessage.RFAUPDATED;
+        result.message = ResponseMessage.REQUESTSTATUSUPDATED;
         result.data = updatedRequest;
       } else {
         // Handle update failure
-        result.message = ResponseMessage.RFANOTUPDATED;
+        result.message = ResponseMessage.REQUESTSTATUSNOTUPDATED;
       }
     }
   } catch (error) {
@@ -338,5 +354,5 @@ module.exports = {
   addConversation,
   getConversation,
   updateRequestStatus,
-  getPurchaseRequestCount
+  getPurchaseRequestCount,
 };
