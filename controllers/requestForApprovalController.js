@@ -1,6 +1,6 @@
 const { requestWhitelist } = require("express-winston");
 const {
-    saveRequest,getApprovals,getConversation,updateRequestStatus, addConversation
+    saveRequest,getApprovals,getConversation,updateRequestStatus, addConversation, getPurchaseRequestCount
   } = require("../services/requestForApproval.js");
   const logger = require("../utils/logger.js");
 
@@ -34,7 +34,14 @@ const {
     const result = await updateRequestStatus(request.params.requestId,request.body);
     response.json(result);
   };
+
+  const purchaseRequestCount = async function (request, response) {
+    logger.info(`Get Purchase Request Count : ${JSON.stringify(request.body)}`);
+    const result = await getPurchaseRequestCount(request.user);
+    response.json(result);
+  };
   
   
-  module.exports = { addRequest,fetchApprovals ,saveConversation,getConvRequest,updateRequest};
+  
+  module.exports = { addRequest,fetchApprovals ,saveConversation,getConvRequest,updateRequest,purchaseRequestCount};
   

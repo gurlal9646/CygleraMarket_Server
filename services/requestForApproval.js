@@ -181,6 +181,97 @@ const updateRequestStatus = async (requestId, request) => {
   return result;
 };
 
+const getPurchaseRequestCount = async (user) => {
+  let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
+  try {
+    logger.info(`Get purchase request count start ${new Date().toISOString()}`);
+    let requestCount = {
+      total: 0,
+      approved: 0,
+      rejected: 0,
+      pending: 0,
+    };
+    if (user.roleId === Roles.BUYER) {
+      let allRequests = await RequestForApproval.find({ buyerId: user.userId });
+
+      // Assign total count
+      requestCount.total = allRequests.length;
+
+      // Count requests with different statuses
+      allRequests.forEach((request) => {
+        switch (request.status) {
+          case "approved":
+            requestCount.approved++;
+            break;
+          case "rejected":
+            requestCount.rejected++;
+            break;
+          case "pending":
+            requestCount.pending++;
+            break;
+          default:
+            break;
+        }
+      });
+    } else if (user.roleId === Roles.SELLER) {
+      let allRequests = await RequestForApproval.find({
+        sellerId: user.userId,
+      });
+
+      // Assign total count
+      requestCount.total = allRequests.length;
+
+      // Count requests with different statuses
+      allRequests.forEach((request) => {
+        switch (request.status) {
+          case "approved":
+            requestCount.approved++;
+            break;
+          case "rejected":
+            requestCount.rejected++;
+            break;
+          case "pending":
+            requestCount.pending++;
+            break;
+          default:
+            break;
+        }
+      });
+    } else if (user.roleId === Roles.ADMIN) {
+      let allRequests = await RequestForApproval.find();
+
+      // Assign total count
+      requestCount.total = allRequests.length;
+
+      // Count requests with different statuses
+      allRequests.forEach((request) => {
+        switch (request.status) {
+          case "approved":
+            requestCount.approved++;
+            break;
+          case "rejected":
+            requestCount.rejected++;
+            break;
+          case "pending":
+            requestCount.pending++;
+            break;
+          default:
+            break;
+        }
+      });
+    }
+
+    result.code = ResponseCode.SUCCESS;
+    result.data = requestCount;
+  } catch (error) {
+    // Handle errors if any occur during the database operation
+    logger.error(`Error fetching approvals: ${error}`);
+    result.message = "Unable to fetch approvals";
+    result.subcode = ResponseSubCode.EXCEPTION;
+  }
+  return result;
+};
+
 const addConversation = async (request) => {
   let result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   try {
@@ -189,9 +280,7 @@ const addConversation = async (request) => {
     );
     request.conversationId = uuidv4();
 
-    let dbResponse = await RequestConversation.create(
-      request
-    );
+    let dbResponse = await RequestConversation.create(request);
     if (dbResponse._id) {
       result.code = ResponseCode.SUCCESS;
       result.data = dbResponse;
@@ -249,4 +338,5 @@ module.exports = {
   addConversation,
   getConversation,
   updateRequestStatus,
+  getPurchaseRequestCount
 };

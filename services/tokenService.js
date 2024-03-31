@@ -129,10 +129,11 @@ const resetPasswordLink = async ({ email }) => {
       }).save();
     }
     console.log(token.token);
-
-    const link = `${process.env.BASE_URL}/password-reset/${user._id}/${token.token}`;
+S
+    const link = `${process.env.REMOTE}/user/password-reset/${user._id}/${token.token}`;
 
     const emailContent = EmailTemplate.RESETPASSWORD.replace("$link", link);
+    console.log(link);
     await sendEmail(user.email, "Password reset", emailContent);
 
     result.code = ResponseCode.SUCCESS;
@@ -156,7 +157,6 @@ const resetPassword = async ({ pass, userId, token }) => {
       return result;
     }
 
-    console.log(userId);
     const user = await AccessInfo.findById(userId);
     if (!user) {
       result.message = "Invalid link or expired(User Not Found)";

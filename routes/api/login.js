@@ -7,7 +7,7 @@ const userController = require('../../controllers/userController')
 
 router.post("/token", loginController.Token);
 router.post("/password-reset", loginController.PasswordLink);
-router.post("/password-reset/:userId/:token", loginController.resPassword);
+router.put("/password-reset/:userId/:token", loginController.resPassword);
 
 
 router.get('/details', userController.getUserDetails);
