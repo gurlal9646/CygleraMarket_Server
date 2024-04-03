@@ -15,13 +15,15 @@ const {
   ResponseCode,
   ResponseSubCode,
   ResponseMessage,
-  Roles,
-  Email,
-  EmailTemplate,
+  Roles
 } = require("../utils/Enums.js");
+
+const {
+  EmailTemplateType,
+  getEmailTemplate
+} = require("../utils/EmailTemplates.js");
 const ApiResponse = require("../utils/models/ApiResponse.js");
 const logger = require("../utils/logger.js");
-const { response } = require("express");
 
 const generateToken = async ({ email, password, roleId }) => {
   let accessInfo;
@@ -112,7 +114,7 @@ const resetPasswordLink = async ({ email }) => {
   const result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
 
   try {
-    const user = await AccessInfo.findOne({ email: email });
+    const user = await AccessInfo.findOne({ email:  { $regex: email, $options: "i" }});
     if (!user) {
       result.subcode = ResponseSubCode.USERNOTEXISTS;
       result.message = "User with given email doesn't exist";
@@ -126,16 +128,19 @@ const resetPasswordLink = async ({ email }) => {
         token: crypto.randomBytes(32).toString("hex"),
       }).save();
     }
-S
-    const link = `${process.env.REMOTE}/user/password-reset/${user._id}/${token.token}`;
 
-    const emailContent = EmailTemplate.RESETPASSWORD.replace("$link", link);
-    console.log(link);
-    await sendEmail(user.email, "Password reset", emailContent);
+    const link = `${process.env.REMOTE}/login/resetpassword/${user._id}/${token.token}`;
+
+    const template = getEmailTemplate(EmailTemplateType.RESET_PASSWORD);
+
+    if(template){
+      template.content = template.content.replace("$link", link);
+      await sendEmail(user.email, template.subject, template.content);
+    }
+    
 
     result.code = ResponseCode.SUCCESS;
     result.message = "Password reset link sent successfully";
-    console.log(result);
     return result;
   } catch (error) {
     console.error(`Error occurred in resetPassword: ${error}`);

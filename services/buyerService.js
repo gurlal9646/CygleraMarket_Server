@@ -12,6 +12,11 @@ const { AccessInfo } = require("../utils/models/AccessInfo.js");
 const { generateToken } = require("../services/tokenService");
 const logger = require("../utils/logger.js");
 const { v4: uuidv4 } = require('uuid');
+const { sendEmail } = require("../utils/sendEmail.js");
+const {
+  EmailTemplateType,
+  getEmailTemplate
+} = require("../utils/EmailTemplates.js");
 
 
 const registerBuyer = async (buyer) => {
@@ -54,6 +59,11 @@ const registerBuyer = async (buyer) => {
         result.code = ResponseCode.SUCCESS;
         result.message = ResponseMessage.NEWUSERMESSAGE;
         result.data = data;
+      }
+      const template = getEmailTemplate(EmailTemplateType.WELCOME_BUYER);
+      if(template){
+        template.content = template.content.replace("$name", `${buyer.firstName} ${buyer.lastName} `);
+        await sendEmail(buyer.email, template.subject, template.content);
       }
     }
   } catch (error) {
