@@ -71,6 +71,8 @@ class ResponseMessage{
         static REQUESTSTATUSUPDATED='Purchase request has been updated.';
         static REQUESTSTATUSNOTUPDATED='Purchase request not updated.';
 
+        static VALID_OTP_MESSAGE = 'The OTP is correct. Access granted!';
+        static INVALID_OTP_MESSAGE = 'The OTP is incorrect. Please try again.';
 
 
 

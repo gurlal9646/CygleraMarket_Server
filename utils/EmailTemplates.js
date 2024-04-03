@@ -2,6 +2,7 @@ class EmailTemplateType {
   static RESET_PASSWORD = "RESET_PASSWORD";
   static WELCOME_BUYER = "WELCOME_BUYER";
   static WELCOME_SUPPLIER = "WELCOME_SUPPLIER";
+  static OTP ="OTP"
 }
 
 // Define an array of email templates
@@ -125,6 +126,44 @@ const emailTemplates = [
       </html>
     `,
   },
+  {
+    type: EmailTemplateType.OTP,
+    subject: "Your One-Time Password (OTP)",
+    content: `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Your One-Time Password (OTP)</title>
+        </head>
+        <body style="font-family: Arial, sans-serif;">
+        
+            <table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#f4f4f4">
+                <tr>
+                    <td align="center" style="padding: 40px 0;">
+                        <table cellpadding="0" cellspacing="0" border="0" width="600" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                            <tr>
+                                <td style="padding: 40px; text-align: center;">
+                                    <p style="font-size: 16px; color: #666666; line-height: 1.6;">Dear User,</p>
+                                    <p style="font-size: 16px; color: #666666; line-height: 1.6;">Your One-Time Password (OTP) is: <strong>$otp</strong></p>
+                                    <p style="font-size: 16px; color: #666666; line-height: 1.6;">This OTP is valid for a single use and expires shortly.</p>
+                                    <p style="font-size: 16px; color: #666666; line-height: 1.6;">If you did not request this OTP, please ignore this email.</p>
+                                    <p style="font-size: 16px; color: #666666; line-height: 1.6;">Thank you for using our service!</p>
+                                    <p style="font-size: 16px; color: #666666; line-height: 1.6;">Best regards,<br>Cyglera Market Team</p>
+                                 </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        
+        </body>
+        </html>
+      `,
+}
+
 ];
 
 const getEmailTemplate = (templateType) => {

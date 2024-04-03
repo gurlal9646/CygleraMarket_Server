@@ -1,4 +1,4 @@
-const { generateToken ,resetPassword,resetPasswordLink} = require("../services/tokenService");
+const { generateToken ,resetPassword,resetPasswordLink,verifyOtp} = require("../services/tokenService");
 const logger = require("../utils/logger.js");
 
 const Token = async function (request, response) {
@@ -24,5 +24,12 @@ const resPassword = async function (request, response) {
   response.json(tokenResponse);
 };
 
+const ValidateOTP = async function (request, response) {
+  logger.info(`Validate OTP Request: ${JSON.stringify(request.body)}`);
+  const { email,otp } = request.body; 
+  const tokenResponse = await verifyOtp(email,otp);
+  response.json(tokenResponse);
+};
 
-module.exports = { Token,PasswordLink,resPassword};
+
+module.exports = { Token,PasswordLink,resPassword,ValidateOTP};

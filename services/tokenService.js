@@ -8,6 +8,8 @@ const { Buyer } = require("../utils/models/BuyerInfo.js");
 const { comparePasswords } = require("../utils/bcrypt.js");
 const { encryptPassword } = require("../utils/bcrypt.js");
 const { sendEmail } = require("../utils/sendEmail.js");
+const otpGenerator = require("otp-generator");
+const { OTP } = require("../utils/models/OtpSchema.js");
 
 const Token = require("../utils/models/Token.js");
 
@@ -15,12 +17,12 @@ const {
   ResponseCode,
   ResponseSubCode,
   ResponseMessage,
-  Roles
+  Roles,
 } = require("../utils/Enums.js");
 
 const {
   EmailTemplateType,
-  getEmailTemplate
+  getEmailTemplate,
 } = require("../utils/EmailTemplates.js");
 const ApiResponse = require("../utils/models/ApiResponse.js");
 const logger = require("../utils/logger.js");
@@ -74,9 +76,6 @@ const generateToken = async ({ email, password, roleId }) => {
           default:
             break;
         }
-
-        console.log(userId);
-
         const token = jwt.sign(
           {
             userId: userId,
@@ -94,8 +93,10 @@ const generateToken = async ({ email, password, roleId }) => {
           firstName: userInfo.firstName,
           lastName: userInfo.lastName,
           email: accessInfo.email,
-          uniqueId: userId
+          uniqueId: userId,
         };
+
+        await sendOtp(result.data.email);
         return result;
       } else {
         result.message = ResponseMessage.WRONGPASSMESSAGE;
@@ -110,11 +111,54 @@ const generateToken = async ({ email, password, roleId }) => {
   return result;
 };
 
+const sendOtp = async (email) => {
+  let otp = otpGenerator.generate(6, {
+    upperCaseAlphabets: false,
+    lowerCaseAlphabets: false,
+    specialChars: false,
+  });
+  let result = await OTP.findOne({ otp: otp });
+  console.log("Result", result);
+  while (result) {
+    otp = otpGenerator.generate(6, {
+      upperCaseAlphabets: false,
+    });
+    result = await OTP.findOne({ otp: otp });
+  }
+  const otpPayload = { email, otp };
+  const otpBody = await OTP.create(otpPayload);
+  if (otpBody._id) {
+    logger.info(`OTP ${otp} generated for User ${email} in token service`);
+  }
+  const template = getEmailTemplate(EmailTemplateType.OTP);
+
+  if (template) {
+    template.content = template.content.replace("$otp", otp);
+    await sendEmail(email, template.subject, template.content);
+  }
+};
+
+const verifyOtp = async (email, otp) => {
+  const result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
+  const response = await OTP.find({ email: { $regex: email, $options: "i" } })
+    .sort({ createdAt: -1 })
+    .limit(1);
+  if (response.length === 0 || otp !== response[0].otp) {
+    result.message = ResponseMessage.INVALID_OTP_MESSAGE;
+  } else {
+    result.code = ResponseCode.SUCCESS;
+    result.message = ResponseMessage.INVALID_OTP_MESSAGE;
+  }
+  return result;
+};
+
 const resetPasswordLink = async ({ email }) => {
   const result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
 
   try {
-    const user = await AccessInfo.findOne({ email:  { $regex: email, $options: "i" }});
+    const user = await AccessInfo.findOne({
+      email: { $regex: email, $options: "i" },
+    });
     if (!user) {
       result.subcode = ResponseSubCode.USERNOTEXISTS;
       result.message = "User with given email doesn't exist";
@@ -133,11 +177,10 @@ const resetPasswordLink = async ({ email }) => {
 
     const template = getEmailTemplate(EmailTemplateType.RESET_PASSWORD);
 
-    if(template){
+    if (template) {
       template.content = template.content.replace("$link", link);
       await sendEmail(user.email, template.subject, template.content);
     }
-    
 
     result.code = ResponseCode.SUCCESS;
     result.message = "Password reset link sent successfully";
@@ -198,4 +241,4 @@ connect()
     process.exit(1); // Exit the application if the database connection fails
   });
 
-module.exports = { generateToken, resetPasswordLink, resetPassword };
+module.exports = { generateToken, resetPasswordLink, resetPassword, verifyOtp };
