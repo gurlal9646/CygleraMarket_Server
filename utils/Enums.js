@@ -76,4 +76,4 @@ class ResponseMessage{
 
 }
 
-module.exports = { Roles ,ResponseCode ,ResponseSubCode,ResponseMessage,EmailTemplateType };
+module.exports = { Roles ,ResponseCode ,ResponseSubCode,ResponseMessage };
