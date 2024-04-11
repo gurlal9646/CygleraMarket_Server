@@ -48,8 +48,8 @@ class ResponseMessage{
         static SERVICENOTFOUND = 'Service not found';
         static SERVICENOTDELETED = 'Service not deleted';
 
-        static RFAADDED = 'Request for purchase  has been raised. Please wait until admin approves your request';
-        static RFAUPDATED = 'Request for purchase  has been updated. Please wait for admin response';
+        static RFAADDED = 'Request for purchase  has been raised. Please wait until seller approves your request';
+        static RFAUPDATED = 'Request for purchase  has been updated. Please wait for seller response';
         static RFANOTUPDATED = 'Unable to update request for approval ';
 
         static PROGRAMADDED = 'Program added';
