@@ -3,6 +3,7 @@ class EmailTemplateType {
   static WELCOME_BUYER = "WELCOME_BUYER";
   static WELCOME_SUPPLIER = "WELCOME_SUPPLIER";
   static OTP ="OTP"
+  static CHANGE_PASSWORD_CONFIRMATION= "CHANGE_PASSWORD_CONFIRMATION";
 }
 
 // Define an array of email templates
@@ -162,7 +163,45 @@ const emailTemplates = [
         </body>
         </html>
       `,
+},
+{
+    type: EmailTemplateType.CHANGE_PASSWORD_CONFIRMATION,
+    subject: "Password Change Confirmation",
+    content: `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta http-equiv="X-UA-Compatible" content="IE=edge">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Password Change Confirmation</title>
+      </head>
+      <body style="font-family: Arial, sans-serif;">
+      
+          <table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#f4f4f4">
+              <tr>
+                  <td align="center" style="padding: 40px 0;">
+                      <table cellpadding="0" cellspacing="0" border="0" width="600" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                          <tr>
+                              <td style="padding: 40px; text-align: center;">
+                                  <h1 style="color: #333333;">Password Change Confirmation</h1>
+                                  <p style="font-size: 16px; color: #666666; line-height: 1.6;">Dear User,</p>
+                                  <p style="font-size: 16px; color: #666666; line-height: 1.6;">Your password has been successfully changed.</p>
+                                  <p style="font-size: 16px; color: #666666; line-height: 1.6;">If you did not request this change, please contact our support team immediately.</p>
+                                  <p style="font-size: 16px; color: #666666; line-height: 1.6;">Thank you.</p>
+                                  <p style="font-size: 16px; color: #666666; line-height: 1.6;">Best regards,<br>Cyglera Market</p>
+                              </td>
+                          </tr>
+                      </table>
+                  </td>
+              </tr>
+          </table>
+      
+      </body>
+      </html>
+    `,
 }
+
 
 ];
 

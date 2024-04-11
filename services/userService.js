@@ -5,6 +5,12 @@ const ApiResponse = require("../utils/models/ApiResponse.js");
 const { ResponseCode, Roles, ResponseMessage } = require("../utils/Enums.js");
 const { AccessInfo } = require("../utils/models/AccessInfo.js");
 const { comparePasswords, encryptPassword } = require("../utils/bcrypt.js");
+const { sendEmail } = require("../utils/sendEmail.js");
+const {
+  EmailTemplateType,
+  getEmailTemplate
+} = require("../utils/EmailTemplates.js");
+
 
 // Fetch user details by roleId and userId
 async function getUserDetails(roleId, userId) {
@@ -102,6 +108,11 @@ async function changePassword(user, request) {
 
       result.code = ResponseCode.SUCCESS;
       result.message = ResponseMessage.PASSWORDUPDATED;
+
+      const template = getEmailTemplate(EmailTemplateType.WELCOME_SUPPLIER);
+        if(template){
+          await sendEmail(accessInfo.email, template.subject, template.content);
+        }
     }
   } catch (err) {
     console.log(err);
@@ -114,7 +125,6 @@ async function deleteAccount(user) {
   const result = new ApiResponse(ResponseCode.FAILURE, 0, "", null);
   try {
 
-    console.log(user.roleId);
     if (parseInt(user.roleId) === Roles.SELLER) {
       await AccessInfo.findOneAndUpdate(
         { sellerId: user.userId },
