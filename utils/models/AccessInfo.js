@@ -32,6 +32,11 @@ const accessInfoSchema = new Schema({
     default: 0,
     required: true,
   },
+  status: {
+    type: Number,
+    default: 1,
+    required: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

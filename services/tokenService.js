@@ -118,7 +118,6 @@ const sendOtp = async (email) => {
     specialChars: false,
   });
   let result = await OTP.findOne({ otp: otp });
-  console.log("Result", result);
   while (result) {
     otp = otpGenerator.generate(6, {
       upperCaseAlphabets: false,

@@ -15,5 +15,9 @@ router.post("/validateOTP", loginController.ValidateOTP);
 router.get('/details', userController.getUserDetails);
 router.put('/details', userController.updateUserDetails);
 
+router.post('/changePassword', userController.updatePassword);
+router.delete('/deleteAccount', userController.removeAccount);
+
+
 
 module.exports = router;

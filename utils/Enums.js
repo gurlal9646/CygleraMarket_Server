@@ -74,7 +74,8 @@ class ResponseMessage{
         static VALID_OTP_MESSAGE = 'The OTP is correct. Access granted!';
         static INVALID_OTP_MESSAGE = 'The OTP is incorrect. Please try again.';
 
-
+        static PASSWORDUPDATED = 'Password updated successfully.';
+        static CURRENTPASSWORDNOTMATCH = 'Current password is incorrect.';
 
 }
 
