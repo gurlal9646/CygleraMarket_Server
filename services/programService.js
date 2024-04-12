@@ -30,7 +30,7 @@ const getPrograms = async (programId, user) => {
         programs = await Program.aggregate([
           {
             $lookup: {
-              from: "Service", // Name of the Seller collection
+              from: "Seller", // Name of the Seller collection
               localField: "sellerId",
               foreignField: "sellerId", // Common attribute name in the Seller collection
               as: "seller",
@@ -52,6 +52,7 @@ const getPrograms = async (programId, user) => {
             },
           },
         ]);
+
       } else if (user.roleId === Roles.SELLER) {
         // Fetch all Programs related to specific seller
         programs = await Program.find({ sellerId: user.userId });

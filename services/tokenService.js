@@ -127,7 +127,7 @@ const sendOtp = async (email) => {
   const otpPayload = { email, otp };
   const otpBody = await OTP.create(otpPayload);
   if (otpBody._id) {
-    logger.info(`OTP ${otp} generated for User ${email} in token service`);
+    logger.info(`OTP ${otpBody.otp} generated for User ${email} in token service`);
   }
   const template = getEmailTemplate(EmailTemplateType.OTP);
 

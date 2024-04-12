@@ -26,7 +26,7 @@ const getServices = async (serviceId, user) => {
       services = await Service.aggregate([
         {
           $lookup: {
-            from: "Service", // Name of the Seller collection
+            from: "Seller", // Name of the Seller collection
             localField: "sellerId",
             foreignField: "sellerId", // Common attribute name in the Seller collection
             as: "seller",
