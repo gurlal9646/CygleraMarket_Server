@@ -132,8 +132,9 @@ const sendOtp = async (email) => {
   const template = getEmailTemplate(EmailTemplateType.OTP);
 
   if (template) {
-    template.content = template.content.replace("$otp", otp);
-    await sendEmail(email, template.subject, template.content);
+    let emailTemplate = '';
+    emailTemplate = template.content.replace("$otp", otp);
+    await sendEmail(email, template.subject, emailTemplate);
   }
 };
 

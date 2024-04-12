@@ -109,7 +109,7 @@ async function changePassword(user, request) {
       result.code = ResponseCode.SUCCESS;
       result.message = ResponseMessage.PASSWORDUPDATED;
 
-      const template = getEmailTemplate(EmailTemplateType.WELCOME_SUPPLIER);
+      const template = getEmailTemplate(EmailTemplateType.CHANGE_PASSWORD_CONFIRMATION);
         if(template){
           await sendEmail(accessInfo.email, template.subject, template.content);
         }
